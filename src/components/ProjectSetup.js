@@ -1,8 +1,5 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
-import { Redirect } from 'react-router-dom'
-import { createUser, loginUser } from '../actions'
-import { withStyles } from '@material-ui/styles'
+import {ThemeProvider, withStyles} from '@material-ui/styles'
 
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
@@ -11,6 +8,8 @@ import Paper from '@material-ui/core/Paper'
 import Container from '@material-ui/core/Container'
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import Button from '@material-ui/core/Button'
+import Tooltip from '@material-ui/core/Tooltip'
+import { createMuiTheme } from '@material-ui/core/styles'
 
 const styles = () => ({
     '@global': {
@@ -30,11 +29,39 @@ const styles = () => ({
     },
     left: {
         alignSelf: 'flex-start'
+    },
+    createButton: {
+        alignSelf: 'flex-end',
+        marginTop: '20px'
     }
 });
 
 const ProjectSetup = (props) => {
-    const [genre, setGenre] = useState(0);
+    const [genre, setGenre] = useState('');
+    const [projectName, setProjectName] = useState('');
+    const tooltipInfo = "Selecting a genre will give you a template to start your project";
+
+    const theme = createMuiTheme({
+        palette: {
+            primary: {
+                // Purple and green play nicely together.
+                main: '#4791db',
+            },
+            secondary: {
+                // This is green.A700 as hex.
+                main: '#81c784',
+            },
+        },
+    });
+
+    const handleNameChange = ({target}) => {
+        setProjectName(target.value);
+    };
+
+    const createProject = () => {
+
+    };
+
     const render = () => {
         const { classes } = props;
         return (
@@ -50,28 +77,45 @@ const ProjectSetup = (props) => {
                         id="projectName"
                         label="Project Name"
                         name="projectName"
+                        onChange={handleNameChange}
                     />
                     <Typography component="genre" variant="subtitle1" className={classes.left}>
+                        <span>
                         Select a Genre Template
+                        <Tooltip title={tooltipInfo}>
+                            <Fab color={"primary"}>
+                                More Info
+                            </Fab>
+                        </Tooltip>
+                            </span>
                     </Typography>
-                    <ButtonGroup>
-                        <Button variant="contained" color={genre === 1 ? 'primary' : ''} onClick={() => setGenre(1)}>Jazz</Button>
-                        <Button variant="contained" onClick={() => setGenre(2)}>Rock</Button>
-                        <Button variant="contained" onClick={() => setGenre(3)}>Classical</Button>
-                        <Button variant="contained" onClick={() => setGenre(4)}>EDM</Button>
-                    </ButtonGroup>
-                    <Typography component="or" variant="body2">
-                        or
-                    </Typography>
-                    <ButtonGroup>
-                        <Button onClick={() => setGenre(5)}>
+
+                    <ThemeProvider theme={theme}>
+
+                        <ButtonGroup>
+                            <Button variant="contained" color={genre === 'jazz' ? 'primary' : ''} onClick={() => setGenre('jazz')}>
+                                Jazz
+                            </Button>
+                            <Button variant="contained" color={genre === 'rock' ? 'primary' : ''} onClick={() => setGenre('rock')}>
+                                Rock
+                            </Button>
+                            <Button variant="contained" color={genre === 'clas' ? 'primary' : ''} onClick={() => setGenre('clas')}>
+                                Classical
+                            </Button>
+                            <Button variant="contained" color={genre === 'edm' ? 'primary' : ''} onClick={() => setGenre('edm')}>
+                                EDM
+                            </Button>
+                        </ButtonGroup>
+                        <Typography component="or" variant="body2">
+                            or
+                        </Typography>
+                        <Button variant="contained" color={genre === 'blank' ? 'primary' : ''} onClick={() => setGenre('blank')}>
                             Start From Scratch
                         </Button>
-                    </ButtonGroup>
-                    <Typography component="descr" variant="body2">
-                        The genre you select will define the key of your song. Don't worry if you are unsure what that means.
-                        Just choose the genre of music you want to make a song in and we'll set everything up for you!
-                    </Typography>
+                        <Button variant="contained" color='secondary' className={classes.createButton} onClick={createProject}>
+                            Create Project
+                        </Button>
+                    </ThemeProvider>
                 </Paper>
             </Container>
         )
