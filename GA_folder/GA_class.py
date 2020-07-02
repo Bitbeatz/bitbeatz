@@ -37,7 +37,7 @@ def fitness(p_class, ideal):
                 fitness_score +=1*(1/(y+1))
     return (fitness_score/30)
 
-def fornicate (p1, p2):
+def fornicate (p1, p2, mut = 90):
     new_c = [[0] * p1.columns for i in range(p1.rows)]
     print(new_c)
     seed (1)
@@ -48,9 +48,19 @@ def fornicate (p1, p2):
                new_c[y][x] = p1.chromesome [y][x]
            else:
                new_c[y][x] = p2.chromesome [y][x]
+    mut_chance = randint(0,100)
+
+    if mut_chance >= 100-mut:
+         print("mutation occured")
+         x = randint(0, p1.columns -1)
+         y = randint(0, p1.rows -1)
+         if new_c [y][x] != 1:
+            new_c [y][x] = 1
+         else:
+            new_c [y][x] = 0    
+
     kid = percussion_class()
     kid.chromesome = new_c
-    print (new_c)
     return kid
             
         
