@@ -1,11 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { logoutUser } from '../actions'
+import { getMyProjects } from '../helpers/queryProjects'
+
 const Home = (props) => {
     const handleLogout = () => {
         const { dispatch } = props
         dispatch(logoutUser())
     }
+
+    const [projects, setProjects] = useState([])
+    useEffect(() => {
+        async function fetchData() {
+            const res = await getMyProjects(props.user)
+            setProjects(res)
+        }
+        fetchData()
+    }, [])
+
+    getMyProjects(props.user)
+
     const render = () => {
         const { isLoggingOut, logoutError } = props
         return (
@@ -15,6 +29,12 @@ const Home = (props) => {
                 <button onClick={handleLogout}>Logout</button>
                 { isLoggingOut && <p>Logging Out....</p> }
                 { logoutError && <p>Error logging out</p> }
+                <p>My projects: </p>
+                <ul>
+                    { projects.map(project => (
+                        <li key={project.name}>{ project.name }</li>
+                    )) }
+                </ul>
             </div>
         )
     }
@@ -26,5 +46,7 @@ function mapStateToProps(state) {
     return {
         isLoggingOut: state.auth.isLoggingOut,
         logoutError: state.auth.logoutError,
+        user: state.auth.user.email,
     }
-}export default connect(mapStateToProps)(Home)
+}
+export default connect(mapStateToProps)(Home)
