@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import ProtectedRoute from './components/ProtectedRoute'
 import Home from './components/Home'
 import Login from './components/Login'
+import Share from "./components/Share";
+import ProjectSetup from "./components/ProjectSetup";
 
 function App(props) {
     const { isAuthenticated, isVerifying } = props
@@ -17,6 +19,16 @@ function App(props) {
                 isVerifying={isVerifying}
             />
             <Route path="/login" component={Login} />
+            <ProtectedRoute
+                exact
+                path="/share"
+                component={Share}
+            />
+            <ProtectedRoute
+                exact
+                path="/setup"
+                component={ProjectSetup}
+            />
         </Switch>
     )
 }
