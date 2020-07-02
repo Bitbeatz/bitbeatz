@@ -29,7 +29,25 @@ class percussion_class:
                 else:
                     pass
 
+def fitness(p_class, ideal):
+    fitness_score = 0
+    for y in range (0,p_class.rows):
+        print ('row:', y)
+        for x in range(0,p_class.columns):
+            print(p_class.chromesome[y][x],' ',  ideal [y][x])
+            if p_class.chromesome[y][x] and ideal [y][x] == 1:
+                print("MATCH!")
+                fitness_score +=1
+
+    return fitness_score
+
+
+
+
+ideal = [[1,0,0,1,0,0],[1,0,0,1,0,0],[0,0,0,1,0,0],[1,0,1,1,0,1],[1,0,1,1,0,1]]
 ### testing class capabilities            
 bob = percussion_class("bruh", 9)
 print(bob.name)
 print(bob.chromesome)
+print(ideal)
+print (fitness(bob,ideal))
