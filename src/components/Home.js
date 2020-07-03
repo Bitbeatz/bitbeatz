@@ -22,9 +22,8 @@ const styles = () => ({
         },
     },
     paper: {
-        margin: 50,
         display: 'flex',
-        padding: 75,
+        padding: 100,
         flexDirection: 'column'
     },
     form: {
@@ -80,7 +79,7 @@ const Home = (props) => {
         }
         else {
             return (
-                <Container>
+                <div>
                     <Paper className={classes.paper}>
                         <Button variant="contained" color={"secondary"} className={classes.right} onClick={handleLogout}>Logout</Button>
                         {isLoggingOut && <p>Logging Out....</p>}
@@ -114,7 +113,7 @@ const Home = (props) => {
                             ))}
                         </List>
                     </Paper>
-                </Container>
+                </div>
             )
         }
     };

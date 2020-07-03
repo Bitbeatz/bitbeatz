@@ -18,20 +18,20 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1,
+        flexGrow: 0,
     },
     paper: {
-        padding: '50%',
+        padding: 50,
         textAlign: 'center',
         color: theme.palette.text.secondary,
     }
 }));
 
 const Project = (props) => {
+    const classes = useStyles();
     const render = () => {
-        const classes = useStyles;
         return (
-            <container className={classes.root}>
+            <Container className={classes.root}>
                 <Grid container spacing={3}>
                     <Grid item xs={9}>
                         <Paper className={classes.paper}>Matrix</Paper>
@@ -45,7 +45,7 @@ const Project = (props) => {
                         <Paper className={classes.paper}>Bottom Bar</Paper>
                     </Grid>
                 </Grid>
-            </container>
+            </Container>
         )
     };
 
