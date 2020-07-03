@@ -1,20 +1,11 @@
-import React, { useState } from 'react'
-import {ThemeProvider, withStyles} from '@material-ui/styles'
-
-import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
-import Fab from '@material-ui/core/Typography'
-import Paper from '@material-ui/core/Paper'
+import React from 'react'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import Container from '@material-ui/core/Container'
-import ButtonGroup from '@material-ui/core/ButtonGroup'
-import Button from '@material-ui/core/Button'
-import Tooltip from '@material-ui/core/Tooltip'
-import { createMuiTheme } from '@material-ui/core/styles'
-import {db} from "../firebase/firebase";
-import {connect} from "react-redux";
-import Share from "./Share";
-import Grid from "@material-ui/core/Grid";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
+import {connect} from 'react-redux'
+import get from 'lodash/get'
+import { ProjectSetup } from './index'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,34 +19,41 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Project = (props) => {
-    const classes = useStyles();
+    const classes = useStyles()
+    const { match: { params }} = props
+    const projectId = get(params, 'projectId')
+    const isNewProject = projectId === 'new'
+
     const render = () => {
         return (
-            <Container className={classes.root}>
-                <Grid container spacing={3}>
-                    <Grid item xs={9}>
-                        <Paper className={classes.paper}>Matrix</Paper>
-                    </Grid>
-                    <Grid item xs>
-                        <Paper className={classes.paper}>Chat</Paper>
-                    </Grid>
-                </Grid>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <Paper className={classes.paper}>Bottom Bar</Paper>
-                    </Grid>
-                </Grid>
+            <Container maxWidth="xs" className={classes.root}>
+                { isNewProject
+                    ? <ProjectSetup />
+                    : <div>
+                        <Grid container spacing={3}>
+                            <Grid item xs={9}>
+                                <Paper className={classes.paper}>Matrix</Paper>
+                            </Grid>
+                            <Grid item xs>
+                                <Paper className={classes.paper}>Chat</Paper>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12}>
+                                <Paper className={classes.paper}>Bottom Bar</Paper>
+                            </Grid>
+                        </Grid>
+                    </div>
+                }
             </Container>
         )
-    };
+    }
 
     return render()
-};
+}
 
 function mapStateToProps(state) {
     return {
-        isLoggingOut: state.auth.isLoggingOut,
-        logoutError: state.auth.logoutError,
         user: state.auth.user.email,
     }
 }

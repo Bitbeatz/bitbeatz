@@ -10,9 +10,9 @@ import ButtonGroup from '@material-ui/core/ButtonGroup'
 import Button from '@material-ui/core/Button'
 import Tooltip from '@material-ui/core/Tooltip'
 import { createMuiTheme } from '@material-ui/core/styles'
-import {db} from "../firebase/firebase";
-import {connect} from "react-redux";
-import Share from "./Share";
+import {db} from '../firebase/firebase';
+import {connect} from 'react-redux';
+import Share from './Share';
 
 const styles = () => ({
     '@global': {
@@ -43,8 +43,8 @@ const ProjectSetup = (props) => {
     const [genre, setGenre] = useState('');
     const [projectName, setProjectName] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
-    const [projId, setProjId] = useState('');
-    const tooltipInfo = "Selecting a genre will give you a template to start your project";
+    const [projectId, setProjectId] = useState('');
+    const tooltipInfo = 'Selecting a genre will give you a template to start your project';
 
     const theme = createMuiTheme({
         palette: {
@@ -79,8 +79,7 @@ const ProjectSetup = (props) => {
                 genre: genre,
                 users: [props.user]
             }).then((docRef) => {
-                console.log('it worked');
-                setProjId(docRef.id);
+                setProjectId(docRef.id);
             }).catch((e) => {
                 console.log('add failed', e);
                 setErrorMsg('Database Error');
@@ -90,26 +89,9 @@ const ProjectSetup = (props) => {
 
     const render = () => {
         const { classes } = props;
-        if (projId) {
+        if (projectId) {
             return (
-                <Container maxWidth="xs">
-                    <Paper className={classes.paper}>
-                        <ThemeProvider theme={theme}>
-                            <Typography variant="h5">
-                                Share {projectName}
-                            </Typography>
-                            <Typography variant="body2" className={'left'}>
-                                Share the following code with anyone you want to join your project
-                            </Typography>
-                            <Typography>
-                                {projId}
-                            </Typography>
-                            <Button variant="contained" color='secondary' className={classes.createButton}>
-                                Continue to Project
-                            </Button>
-                        </ThemeProvider>
-                    </Paper>
-                </Container>
+                <Share projectName={projectName} projectId={projectId} />
             );
         } else {
             return (
@@ -131,26 +113,26 @@ const ProjectSetup = (props) => {
                             Select a Genre Template
                         </Typography>
                         <Tooltip title={tooltipInfo}>
-                            <Fab color={"primary"}>
+                            <Fab color={'primary'}>
                                 More Info
                             </Fab>
                         </Tooltip>
                         <ThemeProvider theme={theme}>
                             <ButtonGroup>
                                 <Button variant="contained" color={genre === 'jazz' ? 'primary' : ''}
-                                        onClick={() => setGenre('jazz')}>
+                                    onClick={() => setGenre('jazz')}>
                                     Jazz
                                 </Button>
                                 <Button variant="contained" color={genre === 'rock' ? 'primary' : ''}
-                                        onClick={() => setGenre('rock')}>
+                                    onClick={() => setGenre('rock')}>
                                     Rock
                                 </Button>
                                 <Button variant="contained" color={genre === 'clas' ? 'primary' : ''}
-                                        onClick={() => setGenre('clas')}>
+                                    onClick={() => setGenre('clas')}>
                                     Classical
                                 </Button>
                                 <Button variant="contained" color={genre === 'edm' ? 'primary' : ''}
-                                        onClick={() => setGenre('edm')}>
+                                    onClick={() => setGenre('edm')}>
                                     EDM
                                 </Button>
                             </ButtonGroup>
@@ -158,15 +140,15 @@ const ProjectSetup = (props) => {
                                 or
                             </Typography>
                             <Button variant="contained" color={genre === 'blank' ? 'primary' : ''}
-                                    onClick={() => setGenre('blank')}>
+                                onClick={() => setGenre('blank')}>
                                 Start From Scratch
                             </Button>
                             <Button variant="contained" color='secondary' className={classes.createButton}
-                                    onClick={createProject}>
+                                onClick={createProject}>
                                 Create Project
                             </Button>
                             <Typography variant="body2" color={'error'}>
-                                {errorMsg}
+                                { errorMsg }
                             </Typography>
                         </ThemeProvider>
                     </Paper>

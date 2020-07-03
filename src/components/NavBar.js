@@ -2,16 +2,20 @@ import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
-import Drawer from '@material-ui/core/Drawer'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import List from '@material-ui/core/List'
-import Divider from '@material-ui/core/Divider'
-import IconButton from '@material-ui/core/IconButton'
+
+import Button from '@material-ui/core/Button'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Divider from '@material-ui/core/Divider'
+import Drawer from '@material-ui/core/Drawer'
+import IconButton from '@material-ui/core/IconButton'
+import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 
+import { logoutUser } from '../actions'
+import history from '../history'
 import { getMyProjects } from '../helpers/queryProjects'
 
 const drawerWidthOpen = 240
@@ -75,7 +79,12 @@ function NavBar(props) {
             setProjects(res)
         }
         fetchData()
-    }, [])
+    }, [props.user])
+
+    const handleLogout = () => {
+        const { dispatch } = props
+        dispatch(logoutUser())
+    }
 
     const toggleDrawer = () => {
         setOpen(!open)
@@ -100,14 +109,20 @@ function NavBar(props) {
                 </div>
                 <Divider />
                 { open &&
-                    <List>
-                        { projects.map(project => (
-                            <ListItem button key={project.name}>
-                                <ListItemText primary={project.name} />
-                            </ListItem>
-                        )) }
-                    </List>
+                    <React.Fragment>
+                        <List>
+                            { projects.map(project => (
+                                <ListItem button key={project.name} onClick={() => history.push(`/project/${project.name}`)}>
+                                    <ListItemText primary={project.name} />
+                                </ListItem>
+                            )) }
+                        </List>
+                        <ListItem button onClick={() => history.push('/project/new')}>
+                            <ListItemText primary="Create a new project" />
+                        </ListItem>
+                    </React.Fragment>
                 }
+                <Button variant="contained" color={'secondary'} className={classes.right} onClick={handleLogout}>Logout</Button>
             </Drawer>
             <main
                 className={clsx(classes.content, open ? classes.contentShiftOpen : classes.contentShiftClosed)}

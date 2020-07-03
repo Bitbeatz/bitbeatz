@@ -1,35 +1,30 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
-import ProtectedRoute from './components/ProtectedRoute'
-import Home from './components/Home'
-import Login from './components/Login'
-import Share from "./components/Share";
-import ProjectSetup from "./components/ProjectSetup";
+import { ProtectedRoute, Home, Login, Project } from './components'
+import history from './history'
 
 function App(props) {
     const { isAuthenticated, isVerifying } = props
     return (
-        <Switch>
-            <ProtectedRoute
-                exact
-                path="/"
-                component={Home}
-                isAuthenticated={isAuthenticated}
-                isVerifying={isVerifying}
-            />
-            <Route path="/login" component={Login} />
-            <ProtectedRoute
-                exact
-                path="/share"
-                component={Share}
-            />
-            <ProtectedRoute
-                exact
-                path="/setup"
-                component={ProjectSetup}
-            />
-        </Switch>
+        <Router history={history}>
+            <Switch>
+                <ProtectedRoute
+                    exact
+                    path="/"
+                    component={Home}
+                    isAuthenticated={isAuthenticated}
+                    isVerifying={isVerifying}
+                />
+                <Route path="/login" component={Login} />
+                <ProtectedRoute
+                    path="/project/:projectId"
+                    component={Project}
+                    isAuthenticated={isAuthenticated}
+                    isVerifying={isVerifying}
+                />
+            </Switch>
+        </Router>
     )
 }
 
