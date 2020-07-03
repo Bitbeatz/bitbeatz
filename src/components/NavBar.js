@@ -10,6 +10,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
 import IconButton from '@material-ui/core/IconButton'
+import HomeIcon from '@material-ui/icons/Home';
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -117,18 +118,23 @@ function NavBar(props) {
                         { open ? <ChevronLeftIcon /> : <ChevronRightIcon /> }
                     </IconButton>
                 </div>
+                <div>
+                    <IconButton onClick={() => history.push('/')}>
+                        <HomeIcon />
+                    </IconButton>
+                </div>
                 <Divider />
                 { open &&
                     <React.Fragment>
                         <List>
                             { projects.map(project => (
-                                <ListItem button key={project.name} onClick={() => history.push(`/project/${project.name}`)}>
+                                <ListItem button key={project.name} onClick={() => history.push(`/project/${project.id}`)}>
                                     <ListItemText primary={project.name} />
                                 </ListItem>
                             )) }
                         </List>
                         <ListItem button onClick={() => history.push('/project/new')}>
-                            <ListItemText primary="Create a new project" />
+                            <ListItemText primary="Create New Project" />
                         </ListItem>
                     </React.Fragment>
                 }

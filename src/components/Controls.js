@@ -11,21 +11,13 @@ import Radio from "@material-ui/core/Radio";
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 0,
-        padding: 50,
+        padding: 20,
         textAlign: 'center',
         color: theme.palette.text.secondary,
     }
 }));
 
 const marks = [
-    {
-        value: 0,
-        label: '0',
-    },
-    {
-        value: 20,
-        label: '20',
-    },
     {
         value: 40,
         label: '40',
@@ -161,6 +153,7 @@ const Controls = (props) => {
                             valueLabelDisplay="auto"
                             marks={marks}
                             max={200}
+                            min={40}
                             disabled={checked !== 'tempo'}
                             onChange={handleTempoChange}
                         />
