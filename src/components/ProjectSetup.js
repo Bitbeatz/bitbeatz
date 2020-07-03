@@ -43,7 +43,7 @@ const ProjectSetup = (props) => {
     const [genre, setGenre] = useState('');
     const [projectName, setProjectName] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
-    const [isCreated, setCreated] = useState(false);
+    const [projId, setProjId] = useState('');
     const tooltipInfo = "Selecting a genre will give you a template to start your project";
 
     const theme = createMuiTheme({
@@ -75,22 +75,42 @@ const ProjectSetup = (props) => {
         }
         else {
             await db.collection('projects').add({
-                projectName: projectName,
+                name: projectName,
                 genre: genre,
                 users: [props.user]
-            }).then(() => {
+            }).then((docRef) => {
                 console.log('it worked');
-                setCreated(true);
+                setProjId(docRef.id);
             }).catch((e) => {
                 console.log('add failed', e);
+                setErrorMsg('Database Error');
             });
         }
     };
 
     const render = () => {
         const { classes } = props;
-        if (isCreated) {
-            return <Share />;
+        if (projId) {
+            return (
+                <Container maxWidth="xs">
+                    <Paper className={classes.paper}>
+                        <ThemeProvider theme={theme}>
+                            <Typography variant="h5">
+                                Share {projectName}
+                            </Typography>
+                            <Typography variant="body2" className={'left'}>
+                                Share the following code with anyone you want to join your project
+                            </Typography>
+                            <Typography>
+                                {projId}
+                            </Typography>
+                            <Button variant="contained" color='secondary' className={classes.createButton}>
+                                Continue to Project
+                            </Button>
+                        </ThemeProvider>
+                    </Paper>
+                </Container>
+            );
         } else {
             return (
                 <Container maxWidth="xs">
@@ -108,18 +128,14 @@ const ProjectSetup = (props) => {
                             onChange={handleNameChange}
                         />
                         <Typography variant="subtitle1" className={classes.left}>
-                        <span>
-                        Select a Genre Template
+                            Select a Genre Template
+                        </Typography>
                         <Tooltip title={tooltipInfo}>
                             <Fab color={"primary"}>
                                 More Info
                             </Fab>
                         </Tooltip>
-                            </span>
-                        </Typography>
-
                         <ThemeProvider theme={theme}>
-
                             <ButtonGroup>
                                 <Button variant="contained" color={genre === 'jazz' ? 'primary' : ''}
                                         onClick={() => setGenre('jazz')}>
