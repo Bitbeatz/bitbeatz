@@ -6,6 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import NoteGrid from '../components/NoteGrid';
 
 import history from '../history'
 import { joinProject } from '../helpers/joinProject'
