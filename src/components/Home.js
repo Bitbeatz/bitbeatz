@@ -13,6 +13,7 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import {db} from "../firebase/firebase";
 import * as firebase from "firebase";
+import Project from "./Project";
 
 const styles = () => ({
     '@global': {
@@ -21,10 +22,9 @@ const styles = () => ({
         },
     },
     paper: {
-        marginTop: 100,
-        marginBottom: 100,
+        margin: 50,
         display: 'flex',
-        padding: 20,
+        padding: 75,
         flexDirection: 'column'
     },
     form: {
@@ -49,6 +49,7 @@ const Home = (props) => {
 
     const [projects, setProjects] = useState([]);
     const [isNewProj, setIsNewProj] = useState(false);
+    const [isProj, setIsProj] = useState(false);
     const [joinCode, setJoinCode] = useState('');
     useEffect(() => {
         async function fetchData() {
@@ -70,13 +71,16 @@ const Home = (props) => {
 
     const render = () => {
         const { classes } = props;
-        const { isLoggingOut, logoutError } = props
+        const { isLoggingOut, logoutError } = props;
         if (isNewProj) {
             return <ProjectSetup />;
         }
+        if (isProj) {
+            return <Project />;
+        }
         else {
             return (
-                <Container maxWidth="xs">
+                <Container>
                     <Paper className={classes.paper}>
                         <Button variant="contained" color={"secondary"} className={classes.right} onClick={handleLogout}>Logout</Button>
                         {isLoggingOut && <p>Logging Out....</p>}
@@ -106,7 +110,7 @@ const Home = (props) => {
                         </row>
                         <List>
                             {projects.map(project => (
-                                <ListItem key={project.name}>{project.name}</ListItem>
+                                <ListItem key={project.name} onClick={() => setIsProj(true)}>{project.name}</ListItem>
                             ))}
                         </List>
                     </Paper>

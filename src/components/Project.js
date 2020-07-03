@@ -13,54 +13,39 @@ import { createMuiTheme } from '@material-ui/core/styles'
 import {db} from "../firebase/firebase";
 import {connect} from "react-redux";
 import Share from "./Share";
+import Grid from "@material-ui/core/Grid";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 
-const styles = () => ({
-    '@global': {
-        body: {
-            backgroundColor: '#e9e9e9',
-        },
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
     },
     paper: {
-        marginTop: 100,
-        display: 'flex',
-        padding: 20,
-        flexDirection: 'column',
-        alignItems: 'center'
-    },
-    form: {
-        marginTop: 1,
-    },
-    left: {
-        alignSelf: 'flex-start'
-    },
-    createButton: {
-        alignSelf: 'flex-end',
-        marginTop: '20px'
+        padding: '50%',
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
     }
-});
+}));
 
 const Project = (props) => {
-
-
-    const theme = createMuiTheme({
-        palette: {
-            primary: {
-                // Purple and green play nicely together.
-                main: '#4791db',
-            },
-            secondary: {
-                // This is green.A700 as hex.
-                main: '#81c784',
-            },
-        },
-    });
-
     const render = () => {
-        const { classes } = props;
+        const classes = useStyles;
         return (
-            <Container maxWidth="xs">
-
-            </Container>
+            <container className={classes.root}>
+                <Grid container spacing={3}>
+                    <Grid item xs={9}>
+                        <Paper className={classes.paper}>Matrix</Paper>
+                    </Grid>
+                    <Grid item xs>
+                        <Paper className={classes.paper}>Chat</Paper>
+                    </Grid>
+                </Grid>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <Paper className={classes.paper}>Bottom Bar</Paper>
+                    </Grid>
+                </Grid>
+            </container>
         )
     };
 
@@ -76,4 +61,4 @@ function mapStateToProps(state) {
 }
 
 
-export default withStyles(styles)(connect(mapStateToProps)(Project))
+export default connect(mapStateToProps)(Project)
