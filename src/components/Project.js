@@ -6,6 +6,7 @@ import Paper from '@material-ui/core/Paper'
 import {connect} from 'react-redux'
 import get from 'lodash/get'
 import { ProjectSetup } from './index'
+import Controls from "./Controls";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,7 +27,7 @@ const Project = (props) => {
 
     const render = () => {
         return (
-            <Container maxWidth="xs" className={classes.root}>
+            <Container className={classes.root}>
                 { isNewProject
                     ? <ProjectSetup />
                     : <div>
@@ -40,7 +41,9 @@ const Project = (props) => {
                         </Grid>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
-                                <Paper className={classes.paper}>Bottom Bar</Paper>
+                                <Paper className={classes.paper}>
+                                    <Controls />
+                                </Paper>
                             </Grid>
                         </Grid>
                     </div>
