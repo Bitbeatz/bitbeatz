@@ -39,10 +39,11 @@ const styles = () => ({
 const Home = (props) => {
     const { classes, isLoggingOut, logoutError, email } = props;
     const [joinCode, setJoinCode] = useState('');
+    const [joinStatus, setJoinStatus] = useState('')
 
     const handleJoinProject = async () => {
         const success = await joinProject(email, joinCode)
-        console.log(success)
+        setJoinStatus(success || 'Failed to join')
     };
 
     const handleJoinCodeChange = ({target}) => {
@@ -75,6 +76,7 @@ const Home = (props) => {
                         <Button variant="contained" color={'primary'} onClick={handleJoinProject}>
                             Join
                         </Button>
+                        <span>{ joinStatus }</span>
                     </div>
                 </Paper>
             </Container>

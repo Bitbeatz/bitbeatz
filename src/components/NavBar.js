@@ -25,6 +25,16 @@ const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
     },
+    bottom: {
+        position: 'absolute',
+        bottom: '10px',
+        display: 'grid',
+        width: 'inherit',
+    },
+    centered: {
+        margin: '0 auto',
+        width: '50%',
+    },
     drawerClosed: {
         width: drawerWidthClosed,
         flexShrink: 0,
@@ -122,7 +132,9 @@ function NavBar(props) {
                         </ListItem>
                     </React.Fragment>
                 }
-                <Button variant="contained" color={'secondary'} className={classes.right} onClick={handleLogout}>Logout</Button>
+                <div className={classes.bottom}>
+                    <Button variant="contained" color={'secondary'} className={classes.centered} onClick={handleLogout}>Logout</Button>
+                </div>
             </Drawer>
             <main
                 className={clsx(classes.content, open ? classes.contentShiftOpen : classes.contentShiftClosed)}
