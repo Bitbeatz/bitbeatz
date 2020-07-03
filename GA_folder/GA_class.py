@@ -33,7 +33,7 @@ def fitness(p_class, ideal):
     fitness_score = 0
     for y in range (0,p_class.rows):
         for x in range(0,p_class.columns):
-            if p_class.chromesome[y][x] and ideal [y][x] == 1:
+            if p_class.chromesome[y][x] ==  ideal [y][x]:
                 fitness_score +=1*(1/(y+1))
     return (fitness_score/30)
 
@@ -63,15 +63,10 @@ def fornicate (p1, p2, mut = 90):
     kid.chromesome = new_c
     return kid
             
-        
-
-            
 
 
 
-
-
-ideal = [[1,0,0,1,0,1],[1,0,0,1,0,0],[0,0,0,1,0,0],[1,0,1,1,0,1],[1,0,1,1,0,1]]
+ideal = [[1,0,0,1,0,1],[1,0,0,1,0,0],[0,0,0,1,0,0],[1,0,0,0,0,0],[1,0,0,0,0,0]]
 ### testing class capabilities            
 bob = percussion_class("bruh", 9)
 bob2 = percussion_class("bruh2", 7)
