@@ -2,11 +2,11 @@ import React, {useState} from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
 import {connect} from 'react-redux'
-import get from 'lodash/get'
-import { ProjectSetup } from './index'
 import Slider from "@material-ui/core/Slider";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import {Build, Cancel} from "@material-ui/icons";
+import Radio from "@material-ui/core/Radio";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -110,7 +110,8 @@ const Controls = (props) => {
     const classes = useStyles();
     const [tempo, setTempo] = useState(100);
     const [variation, setVariation] = useState(10);
-    const [loopLength, setLoopLength] = useState(8);
+    const [loopLength, setLoopLength] = useState(4);
+    const [checked, setChecked] = useState('');
 
     const handleTempoChange = (event, newVal) => {
         setTempo(newVal);
@@ -124,10 +125,32 @@ const Controls = (props) => {
         setLoopLength(newVal);
     };
 
+    const handleChecked = (val) => {
+        if (checked === val) {
+            setChecked('');
+        }
+        else {
+            setChecked(val);
+        }
+    };
+
     const render = () => {
         return (
             <Container className={classes.root}>
                 <Grid container spacing={3}>
+                    <Grid item xs={1}>
+                        <FormControlLabel
+                            control={
+                                <Radio
+                                    icon={<Build />}
+                                    checkedIcon={<Cancel />}
+                                    value={'tempo'}
+                                    onClick={() => handleChecked('tempo')}
+                                    checked={checked === 'tempo'}
+                                />
+                            }
+                        />
+                    </Grid>
                     <Grid item xs={2}>
                         Tempo (bpm)
                     </Grid>
@@ -138,11 +161,25 @@ const Controls = (props) => {
                             valueLabelDisplay="auto"
                             marks={marks}
                             max={200}
+                            disabled={checked !== 'tempo'}
                             onChange={handleTempoChange}
                         />
                     </Grid>
                 </Grid>
                 <Grid container spacing={3}>
+                    <Grid item xs={1}>
+                        <FormControlLabel
+                            control={
+                                <Radio
+                                    icon={<Build />}
+                                    checkedIcon={<Cancel />}
+                                    value={'variation'}
+                                    onClick={() => handleChecked('variation')}
+                                    checked={checked === 'variation'}
+                                />
+                            }
+                        />
+                    </Grid>
                     <Grid item xs={2}>
                         Random Variation
                     </Grid>
@@ -152,11 +189,25 @@ const Controls = (props) => {
                             valueLabelFormat={variation}
                             valueLabelDisplay="auto"
                             marks={varMarks}
+                            disabled={checked !== 'variation'}
                             onChange={handleVariationChange}
                         />
                     </Grid>
                 </Grid>
                 <Grid container spacing={3}>
+                    <Grid item xs={1}>
+                        <FormControlLabel
+                            control={
+                                <Radio
+                                    icon={<Build />}
+                                    checkedIcon={<Cancel />}
+                                    value={'length'}
+                                    onClick={() => handleChecked('length')}
+                                    checked={checked === 'length'}
+                                />
+                            }
+                        />
+                    </Grid>
                     <Grid item xs={2}>
                         Loop Length (beats)
                     </Grid>
@@ -169,6 +220,7 @@ const Controls = (props) => {
                             step={null}
                             max={8}
                             min={2}
+                            disabled={checked !== 'length'}
                             onChange={handleLengthChange}
                         />
                     </Grid>
