@@ -8,6 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import history from '../history'
+import { joinProject } from '../helpers/joinProject'
 
 const styles = () => ({
     '@global': {
@@ -36,10 +37,12 @@ const styles = () => ({
 });
 
 const Home = (props) => {
+    const { classes, isLoggingOut, logoutError, email } = props;
     const [joinCode, setJoinCode] = useState('');
 
-    const joinProject = () => {
-
+    const handleJoinProject = async () => {
+        const success = await joinProject(email, joinCode)
+        console.log(success)
     };
 
     const handleJoinCodeChange = ({target}) => {
@@ -47,20 +50,16 @@ const Home = (props) => {
     };
 
     const render = () => {
-        const { classes } = props;
-        const { isLoggingOut, logoutError } = props;
         return (
             <Container>
                 <Paper className={classes.paper}>
                     { isLoggingOut && <p>Logging Out....</p> }
                     { logoutError && <p>Error logging out</p> }
                     <Typography variant="h2" className={classes.center}>
-                            BitBeatz
+                        BitBeatz
                     </Typography>
-
-
                     <Typography variant="h4">
-                            Projects
+                        Projects
                     </Typography>
                     <Button variant="contained" color={'primary'} onClick={() => history.push('/project/new')}>Create New Project</Button>
                     <div>
@@ -73,8 +72,8 @@ const Home = (props) => {
                             name="join"
                             onChange={handleJoinCodeChange}
                         />
-                        <Button variant="contained" color={'primary'} onClick={joinProject}>
-                                    Join
+                        <Button variant="contained" color={'primary'} onClick={handleJoinProject}>
+                            Join
                         </Button>
                     </div>
                 </Paper>
@@ -89,7 +88,7 @@ function mapStateToProps(state) {
     return {
         isLoggingOut: state.auth.isLoggingOut,
         logoutError: state.auth.logoutError,
-        user: state.auth.user.email,
+        email: state.auth.user.email,
     }
 }
 export default withStyles(styles)(connect(mapStateToProps)(Home))

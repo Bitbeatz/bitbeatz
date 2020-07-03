@@ -60,6 +60,7 @@ app.post('/', (req, res) => {
     const { code, user } = req.body
     if (!code || !user) {
         res.status(500).send('invalid arguments')
+        return
     }
     db.collection('projects').doc(code).update({
         users: admin.firestore.FieldValue.arrayUnion(user)
