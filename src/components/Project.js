@@ -14,6 +14,10 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import AppBar from "@material-ui/core/AppBar";
 import {db} from "../firebase/firebase";
+import NoteGrid from '../components/NoteGrid';
+import { flexbox } from '@material-ui/system';
+import Box from '@material-ui/core/Box';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -65,25 +69,27 @@ const Project = (props) => {
                     </AppBar>
                     <Container className={classes.root}>
                         <div>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={9}>
-                                        <Paper className={classes.paper}>Matrix</Paper>
-                                    </Grid>
-                                    <Grid item xs>
-                                        <Paper className={classes.paper}>Chat</Paper>
-                                    </Grid>
+                            <Grid container spacing={3} justify="flex-start" alignItems="flex-start">
+                                <Grid item xs={9}>
+                                    <Box justifyContent="flex-start" alignItems="flex-start">
+                                        <NoteGrid />
+                                    </Box>
                                 </Grid>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12}>
-                                        <Paper className={classes.paper}>
-                                            <Controls />
-                                        </Paper>
-                                    </Grid>
+                                <Grid item xs>
+                                    <Paper className={classes.paper}>Chat</Paper>
                                 </Grid>
-                            </div>
+                            </Grid>
+                            <Grid container spacing={3} >
+                                <Grid item xs={12}>
+                                    <Paper className={classes.paper}>
+                                        <Controls />
+                                    </Paper>
+                                </Grid>
+                            </Grid>
+                        </div>
                     </Container>
-                    </div>
-                    }
+                </div>
+                }
             </div>
         )
     }
