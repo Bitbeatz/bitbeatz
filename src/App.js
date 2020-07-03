@@ -1,7 +1,7 @@
 import React from 'react'
 import { Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { ProtectedRoute, Home, Login, Project, Share } from './components'
+import { ProtectedRoute, Home, Login, Project } from './components'
 import history from './history'
 
 function App(props) {
