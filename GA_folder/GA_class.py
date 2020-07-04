@@ -37,7 +37,7 @@ def fitness(p_class, ideal):
                 fitness_score +=1*(1/(y+1))
     return (fitness_score/30)
 
-def fornicate (p1, p2, mut = 90):
+def fornicate (p1, p2, mut = 10):
     new_c = [[0] * p1.columns for i in range(p1.rows)]
     print(new_c)
     seed (1)
