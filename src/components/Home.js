@@ -1,60 +1,95 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { logoutUser } from '../actions'
-import { getMyProjects } from '../helpers/queryProjects'
-import ProjectSetup from "./ProjectSetup";
+import {withStyles} from '@material-ui/styles';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import Container from '@material-ui/core/Container';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+
+import history from '../history'
+import { joinProject } from '../helpers/joinProject'
+
+const styles = () => ({
+    '@global': {
+        body: {
+            backgroundColor: '#e9e9e9',
+        },
+    },
+    paper: {
+        display: 'flex',
+        padding: 100,
+        flexDirection: 'column'
+    },
+    form: {
+        marginTop: 1,
+    },
+    left: {
+        alignSelf: 'flex-start',
+    },
+    right: {
+        alignSelf: 'flex-end',
+    },
+    center: {
+        alignSelf: 'center',
+    },
+});
 
 const Home = (props) => {
-    const handleLogout = () => {
-        const { dispatch } = props
-        dispatch(logoutUser())
-    }
+    const { classes, isLoggingOut, logoutError, email } = props;
+    const [joinCode, setJoinCode] = useState('');
+    const [joinStatus, setJoinStatus] = useState('')
 
-    const [projects, setProjects] = useState([])
-    const [isNewProj, setIsNewProj] = useState(false);
-    useEffect(() => {
-        async function fetchData() {
-            const res = await getMyProjects(props.user)
-            setProjects(res)
-        }
-        fetchData()
-    }, [])
+    const handleJoinProject = async () => {
+        const success = await joinProject(email, joinCode)
+        setJoinStatus(success || 'Failed to join')
+    };
 
-    getMyProjects(props.user)
+    const handleJoinCodeChange = ({target}) => {
+        setJoinCode(target.value);
+    };
 
     const render = () => {
-        const { isLoggingOut, logoutError } = props
-        if (isNewProj) {
-            return <ProjectSetup />;
-        }
-        else {
-            return (
-                <div>
-                    <h1>This is your app&apos;s protected area.</h1>
-                    <p>Any routes here will also be protected</p>
-                    <button onClick={handleLogout}>Logout</button>
-                    {isLoggingOut && <p>Logging Out....</p>}
-                    {logoutError && <p>Error logging out</p>}
-                    <button onClick={() => setIsNewProj(true)}>Create New Project</button>
-                    <p>My projects: </p>
-                    <ul>
-                        {projects.map(project => (
-                            <li key={project.name}>{project.name}</li>
-                        ))}
-                    </ul>
-                </div>
-            )
-        }
-    }
+        return (
+            <Container>
+                <Paper className={classes.paper}>
+                    { isLoggingOut && <p>Logging Out....</p> }
+                    { logoutError && <p>Error logging out</p> }
+                    <Typography variant="h2" className={classes.center}>
+                        BitBeatz
+                    </Typography>
+                    <Typography variant="h4">
+                        Projects
+                    </Typography>
+                    <Button variant="contained" color={'primary'} onClick={() => history.push('/project/new')}>Create New Project</Button>
+                    <div>
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            id="join"
+                            label="Join Project With Invite Code"
+                            name="join"
+                            onChange={handleJoinCodeChange}
+                        />
+                        <Button variant="contained" color={'primary'} onClick={handleJoinProject}>
+                            Join
+                        </Button>
+                        <span>{ joinStatus }</span>
+                    </div>
+                </Paper>
+            </Container>
+        )
+    };
 
     return render()
-}
+};
 
 function mapStateToProps(state) {
     return {
         isLoggingOut: state.auth.isLoggingOut,
         logoutError: state.auth.logoutError,
-        user: state.auth.user.email
+        email: state.auth.user.email,
     }
 }
-export default connect(mapStateToProps)(Home)
+export default withStyles(styles)(connect(mapStateToProps)(Home))

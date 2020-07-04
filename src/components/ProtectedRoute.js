@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
-import ProjectSetup from "./ProjectSetup";
+import NavBar from './NavBar'
 
 const ProtectedRoute = ({
     component: Component,
@@ -14,7 +14,9 @@ const ProtectedRoute = ({
             isVerifying ? (
                 <div />
             ) : isAuthenticated ? (
-                <Component {...props} />
+                <NavBar>
+                    <Component {...props} />
+                </NavBar>
             ) : (
                 <Redirect
                     to={{
