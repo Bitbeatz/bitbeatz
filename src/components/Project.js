@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import get from 'lodash/get'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { Container, Grid, Paper, Toolbar, IconButton, AppBar, Typography, Box } from '@material-ui/core'
-import {PauseCircleFilled, PlayCircleFilled, VideocamOff} from '@material-ui/icons'
+import {NavigateBefore, NavigateNext, PauseCircleFilled, PlayCircleFilled, VideocamOff} from '@material-ui/icons'
 
 import { ProjectSetup } from './index'
 import Controls from './Controls'
@@ -102,7 +102,13 @@ const Project = (props) => {
                                             <Grid container spacing={3}>
                                                 <Grid item xs={12}>
                                                     <Paper className={[classes.paper, classes.cam]}>
+                                                        <IconButton>
+                                                            <NavigateBefore color={"primary"} />
+                                                        </IconButton>
                                                         <VideocamOff color={"secondary"} />
+                                                        <IconButton>
+                                                            <NavigateNext color={"primary"} />
+                                                        </IconButton>
                                                     </Paper>
                                                 </Grid>
                                                 <Grid item xs={12}>
