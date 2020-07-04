@@ -87,7 +87,7 @@ const Project = (props) => {
                                         <Grid item xs={12}>
                                             <Paper className={classes.gridPaper}>
                                                 <Box justifyContent="flex-start" alignItems="flex-start" className={classes.overflow}>
-                                                    <NoteGrid projectId={projectId} isNewProject={isNewProject}/>
+                                                    <NoteGrid projectId={projectId} grid={project.grid}/>
                                                 </Box>
                                             </Paper>
                                         </Grid>
