@@ -3,9 +3,19 @@ import { Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { ProtectedRoute, Home, Login, Project } from './components'
 import history from './history'
+import makeStyles from "@material-ui/core/styles/makeStyles";
+
+const useStyles = makeStyles((theme) => ({
+    '@global': {
+        body: {
+            backgroundColor: '#e9e9e9',
+        },
+    },
+}));
 
 function App(props) {
     const { isAuthenticated, isVerifying } = props
+    const classes = useStyles()
     return (
         <Router history={history}>
             <Switch>

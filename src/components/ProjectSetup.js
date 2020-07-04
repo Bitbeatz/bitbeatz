@@ -17,11 +17,6 @@ import Share from './Share';
 import { DEFAULT_GRID } from './constants'
 
 const styles = () => ({
-    '@global': {
-        body: {
-            backgroundColor: '#e9e9e9',
-        },
-    },
     paper: {
         marginTop: 100,
         display: 'flex',
@@ -47,19 +42,6 @@ const ProjectSetup = (props) => {
     const [errorMsg, setErrorMsg] = useState('');
     const [projectId, setProjectId] = useState('');
     const tooltipInfo = 'Selecting a genre will give you a template to start your project';
-
-    const theme = createMuiTheme({
-        palette: {
-            primary: {
-                // Purple and green play nicely together.
-                main: '#4791db',
-            },
-            secondary: {
-                // This is green.A700 as hex.
-                main: '#81c784',
-            },
-        },
-    });
 
     const handleNameChange = ({target}) => {
         setProjectName(target.value);
@@ -120,40 +102,38 @@ const ProjectSetup = (props) => {
                                 More Info
                             </Fab>
                         </Tooltip>
-                        <ThemeProvider theme={theme}>
-                            <ButtonGroup>
-                                <Button variant="contained" color={genre === 'jazz' ? 'primary' : ''}
-                                    onClick={() => setGenre('jazz')}>
-                                    Jazz
-                                </Button>
-                                <Button variant="contained" color={genre === 'rock' ? 'primary' : ''}
-                                    onClick={() => setGenre('rock')}>
-                                    Rock
-                                </Button>
-                                <Button variant="contained" color={genre === 'clas' ? 'primary' : ''}
-                                    onClick={() => setGenre('clas')}>
-                                    Classical
-                                </Button>
-                                <Button variant="contained" color={genre === 'edm' ? 'primary' : ''}
-                                    onClick={() => setGenre('edm')}>
-                                    EDM
-                                </Button>
-                            </ButtonGroup>
-                            <Typography variant="body2">
-                                or
-                            </Typography>
-                            <Button variant="contained" color={genre === 'blank' ? 'primary' : ''}
-                                onClick={() => setGenre('blank')}>
-                                Start From Scratch
+                        <ButtonGroup>
+                            <Button variant="contained" color={genre === 'jazz' ? 'primary' : ''}
+                                onClick={() => setGenre('jazz')}>
+                                Jazz
                             </Button>
-                            <Button variant="contained" color='secondary' className={classes.createButton}
-                                onClick={createProject}>
-                                Create Project
+                            <Button variant="contained" color={genre === 'rock' ? 'primary' : ''}
+                                onClick={() => setGenre('rock')}>
+                                Rock
                             </Button>
-                            <Typography variant="body2" color={'error'}>
-                                { errorMsg }
-                            </Typography>
-                        </ThemeProvider>
+                            <Button variant="contained" color={genre === 'clas' ? 'primary' : ''}
+                                onClick={() => setGenre('clas')}>
+                                Classical
+                            </Button>
+                            <Button variant="contained" color={genre === 'edm' ? 'primary' : ''}
+                                onClick={() => setGenre('edm')}>
+                                EDM
+                            </Button>
+                        </ButtonGroup>
+                        <Typography variant="body2">
+                            or
+                        </Typography>
+                        <Button variant="contained" color={genre === 'blank' ? 'primary' : ''}
+                            onClick={() => setGenre('blank')}>
+                            Start From Scratch
+                        </Button>
+                        <Button variant="contained" color='primary' className={classes.createButton}
+                            onClick={createProject}>
+                            Create Project
+                        </Button>
+                        <Typography variant="body2" color={'error'}>
+                            { errorMsg }
+                        </Typography>
                     </Paper>
                 </Container>
             )
