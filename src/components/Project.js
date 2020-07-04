@@ -72,7 +72,7 @@ const Project = (props) => {
                             </Typography>
                         </Toolbar>
                     </AppBar>
-                    <Container className={classes.root}>
+                    <Container maxWidth="s" className={classes.root}>
                         <div>
                             <Grid container spacing={3} justify="flex-start" alignItems="flex-start">
                                 <Grid item xs={9}>
