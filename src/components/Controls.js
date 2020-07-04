@@ -9,6 +9,7 @@ import {Build, Cancel, Person} from "@material-ui/icons";
 import Radio from "@material-ui/core/Radio";
 import {db} from "../firebase/firebase";
 import {DEFAULT_CONTROLS, DEFAULT_LOCATIONS} from "./constants";
+import {Avatar} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -16,6 +17,10 @@ const useStyles = makeStyles((theme) => ({
         padding: 20,
         textAlign: 'center',
         color: theme.palette.text.secondary,
+    },
+    avatar: {
+        width: theme.spacing(3),
+        height: theme.spacing(3),
     }
 }));
 
@@ -209,18 +214,20 @@ const Controls = (props) => {
             <Container className={classes.root}>
                 <Grid container spacing={3}>
                     <Grid item xs={1}>
-                        <FormControlLabel
-                            control={ locations.tempo === '' || locations.tempo === props.user ?
-                                <Radio
-                                    icon={<Build />}
-                                    checkedIcon={<Cancel />}
-                                    value={'tempo'}
-                                    onClick={() => handleLocationsChange('tempo')}
-                                    checked={locations.tempo === props.user}
-                                /> :
-                                <Person />
-                            }
-                        />
+                        { locations.tempo === '' || locations.tempo === props.user ?
+                            <FormControlLabel
+                                control={
+                                    <Radio
+                                        icon={<Build />}
+                                        checkedIcon={<Cancel />}
+                                        value={'tempo'}
+                                        onClick={() => handleLocationsChange('tempo')}
+                                        checked={locations.tempo === props.user}
+                                    />
+                                }
+                            /> :
+                            <Avatar className={classes.avatar}>{ locations.tempo[0].toUpperCase() }</Avatar>
+                        }
                     </Grid>
                     <Grid item xs={2}>
                         Tempo (bpm)
@@ -241,18 +248,20 @@ const Controls = (props) => {
                 </Grid>
                 <Grid container spacing={3}>
                     <Grid item xs={1}>
-                        <FormControlLabel
-                            control={ locations.variation === '' || locations.variation === props.user ?
-                                <Radio
-                                    icon={<Build />}
-                                    checkedIcon={<Cancel />}
-                                    value={'variation'}
-                                    onClick={() => handleLocationsChange('variation')}
-                                    checked={locations.variation === props.user}
-                                /> :
-                                <Person />
-                            }
-                        />
+                        { locations.variation === '' || locations.variation === props.user ?
+                            <FormControlLabel
+                                control={
+                                    <Radio
+                                        icon={<Build />}
+                                        checkedIcon={<Cancel />}
+                                        value={'variation'}
+                                        onClick={() => handleLocationsChange('variation')}
+                                        checked={locations.variation === props.user}
+                                    />
+                                }
+                            /> :
+                            <Avatar className={classes.avatar}>{ locations.variation[0].toUpperCase() }</Avatar>
+                        }
                     </Grid>
                     <Grid item xs={2}>
                         Random Variation
@@ -271,18 +280,20 @@ const Controls = (props) => {
                 </Grid>
                 <Grid container spacing={3}>
                     <Grid item xs={1}>
-                        <FormControlLabel
-                            control={ locations.loopLength === '' || locations.loopLength === props.user ?
-                                <Radio
-                                    icon={<Build />}
-                                    checkedIcon={<Cancel />}
-                                    value={'loopLength'}
-                                    onClick={() => handleLocationsChange('loopLength')}
-                                    checked={locations.loopLength === props.user}
-                                /> :
-                                <Person />
-                            }
-                        />
+                        {locations.loopLength === '' || locations.loopLength === props.user ?
+                            <FormControlLabel
+                                control={
+                                    <Radio
+                                        icon={<Build/>}
+                                        checkedIcon={<Cancel/>}
+                                        value={'loopLength'}
+                                        onClick={() => handleLocationsChange('loopLength')}
+                                        checked={locations.loopLength === props.user}
+                                    />
+                                }
+                            /> :
+                            <Avatar className={classes.avatar}>{locations.loopLength[0].toUpperCase()}</Avatar>
+                        }
                     </Grid>
                     <Grid item xs={2}>
                         Loop Length (beats)
