@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import get from 'lodash/get'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { Container, Grid, Paper, Toolbar, IconButton, AppBar, Typography, Box } from '@material-ui/core'
-import {PauseCircleFilled, PlayCircleFilled} from '@material-ui/icons'
+import {PauseCircleFilled, PlayCircleFilled, VideocamOff} from '@material-ui/icons'
 
 import { ProjectSetup } from './index'
 import Controls from './Controls'
@@ -26,7 +26,18 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
     },
     containerPaper: {
-        color: theme.palette.text.secondary,
+        color: theme.palette.text.secondary
+    },
+    overflow: {
+        overflow: 'hidden'
+    },
+    section: {
+        height: '100%',
+        maxHeight: '100%',
+        overflow: 'hidden'
+    },
+    cam: {
+        backgroundColor: '#000000'
     }
 }))
 
@@ -71,29 +82,38 @@ const Project = (props) => {
                         </AppBar>
                         <Paper className={classes.containerPaper}>
                             <Container maxWidth="xl" className={classes.root}>
-                                <div>
+                                <Grid>
                                     <Grid container spacing={3} justify="flex-start" alignItems="flex-start">
-                                        <Grid item xs={9}>
+                                        <Grid item xs={12}>
                                             <Paper className={classes.gridPaper}>
-                                                <Box justifyContent="flex-start" alignItems="flex-start">
+                                                <Box justifyContent="flex-start" alignItems="flex-start" className={classes.overflow}>
                                                     <NoteGrid projectId={projectId} grid={project.grid}/>
                                                 </Box>
                                             </Paper>
                                         </Grid>
-                                        <Grid item xs={3}>
-                                            <Paper>
-                                                <Chat projectId={projectId} messages={project.chatMessages}/>
-                                            </Paper>
-                                        </Grid>
                                     </Grid>
-                                    <Grid container spacing={3} >
-                                        <Grid item xs={12}>
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={9}>
                                             <Paper className={classes.paper}>
                                                 <Controls />
                                             </Paper>
                                         </Grid>
+                                        <Grid item xs={3}>
+                                            <Grid container spacing={3}>
+                                                <Grid item xs={12}>
+                                                    <Paper className={[classes.paper, classes.cam]}>
+                                                        <VideocamOff color={"secondary"} />
+                                                    </Paper>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <Paper className={classes.section}>
+                                                        <Chat projectId={projectId} messages={project.chatMessages}/>
+                                                    </Paper>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
                                     </Grid>
-                                </div>
+                                </Grid>
                             </Container>
                         </Paper>
                     </div>
