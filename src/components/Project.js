@@ -66,18 +66,23 @@ const Project = (props) => {
                     : <div>
                         <AppBar position="static">
                             <Toolbar>
-                                <IconButton edge="start" color="inherit" aria-label="menu" onClick={() => setPlaying(!playing)}>
-                                    { !playing ? <PlayCircleFilled /> : <PauseCircleFilled /> }
-                                </IconButton>
-                                <Typography variant="h6">
-                                    { project.name }
-                                </Typography>
-                                <Typography variant="body1">
-                                Share Code:
-                                </Typography>
-                                <Typography variant="body2">
-                                    { projectId }
-                                </Typography>
+                                <Grid container spacing={1}>
+                                    <Grid item xs={1}>
+                                        <IconButton edge="start" color="inherit" aria-label="menu" onClick={() => setPlaying(!playing)}>
+                                            { !playing ? <PlayCircleFilled /> : <PauseCircleFilled /> }
+                                        </IconButton>
+                                    </Grid>
+                                    <Grid item xs>
+                                        <Typography variant="h4">
+                                            { project.name }
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <Typography variant="body2">
+                                        Share Code: {projectId}
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
                             </Toolbar>
                         </AppBar>
                         <Paper className={classes.containerPaper}>

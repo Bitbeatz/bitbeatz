@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
 
 function NavBar(props) {
     const classes = useStyles()
-    const [open, setOpen] = React.useState(true)
+    const [open, setOpen] = React.useState(false)
     const [projects, setProjects] = useState([])
 
     useEffect(() => {
