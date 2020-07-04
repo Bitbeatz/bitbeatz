@@ -77,7 +77,8 @@ const ProjectSetup = (props) => {
             await db.collection('projects').add({
                 name: projectName,
                 genre: genre,
-                users: [props.user]
+                users: [props.user],
+                grid: {}
             }).then((docRef) => {
                 setProjectId(docRef.id);
             }).catch((e) => {
