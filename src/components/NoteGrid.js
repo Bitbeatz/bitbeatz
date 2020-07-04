@@ -59,7 +59,7 @@ class NoteGrid extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.grid !== prevProps.grid) {
+        if (this.props.grid && this.props.grid !== prevProps.grid) {
             this.setState({ grid: this.props.grid })
         }
     }
