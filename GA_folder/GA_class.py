@@ -3,6 +3,40 @@ from random import seed
 from random import randint
 from random import shuffle
 import matplotlib.pyplot as plt
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+
+cred=credentials.Certificate('./adminKey.json')
+firebase_admin.initialize_app(cred)
+
+db = firestore.client()
+
+projectId = u'test'
+ideal = []
+
+doc_ref = db.collection(u'projects').document(projectId)
+project_doc = doc_ref.get()
+if project_doc.exists:
+    data = project_doc.to_dict()
+    if 'ideal' in data:
+        idealData = data['ideal']
+        for i in idealData:
+            ideal.append(i['0'])
+        print(f'ideal: {ideal}')
+else:
+    exit()
+
+# doc_ref.update({
+#     u'ideal': [
+#         { u'0': [1,0,0,1,0,1] },
+#         { u'0': [1,0,0,1,0,0] },
+#         { u'0': [0,0,0,1,0,0] },
+#         { u'0': [1,0,0,0,0,0] },
+#         { u'0': [1,0,0,0,0,0] },
+#     ]
+# })
+# exit()
 
 seed(1)
 def Sort(sub_li): 
@@ -109,7 +143,7 @@ def create_next_gen(pop, ideal):
 
 
 
-ideal = [[1,0,0,1,0,1],[1,0,0,1,0,0],[0,0,0,1,0,0],[1,0,0,0,0,0],[1,0,0,0,0,0]]
+# ideal = [[1,0,0,1,0,1],[1,0,0,1,0,0],[0,0,0,1,0,0],[1,0,0,0,0,0],[1,0,0,0,0,0]]
 ### testing class capabilities      
 points =[]
 generation = generate_population(100)
@@ -130,6 +164,17 @@ plt.plot(points)
 plt.ylabel('Fitness Score')
 plt.xlabel('Generation')
 plt.show()
+
+final_chromosome = generation[0].chromesome
+output = []
+for c in final_chromosome:
+    output.append({ '0': c })
+
+doc_ref.update({
+    u'output': output
+})
+print("final generation, 0th lad: ", output)
+exit()
     
     
 
