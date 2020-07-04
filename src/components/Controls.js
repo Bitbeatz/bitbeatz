@@ -110,7 +110,8 @@ const Controls = (props) => {
     const [tempo, setTempo] = useState(DEFAULT_CONTROLS.tempo);
     const [variation, setVariation] = useState(DEFAULT_CONTROLS.variation);
     const [loopLength, setLoopLength] = useState(DEFAULT_CONTROLS.loopLength);
-    const [locations, setLocations] = useState(DEFAULT_LOCATIONS);
+    const [locations, setLocations] = useState({[props.username]: ''});
+    const [locked, setLocked] = useState(DEFAULT_LOCATIONS);
 
     const handleTempoChange = (event, newVal) => {
         setTempo(newVal);
@@ -148,22 +149,12 @@ const Controls = (props) => {
     };
 
     const handleLocationsChange = (loc) => {
-        let previousLoc = '';
-        if (locations[loc] === props.user) {
-            setLocations({...locations, [loc]: ''})
+        if (locations[props.username] === loc) {
+            setLocations[props.username] = '';
+            updateFireStoreLocations('');
         } else {
-            previousLoc = getPrevLoc();
-            setLocations({...locations, [previousLoc]: ''});
-            setLocations({...locations, [loc]: props.user});
-        }
-        updateFireStoreLocations(loc, previousLoc);
-    };
-
-    const getPrevLoc = () => {
-        for (const location in locations) {
-            if(locations[location] === props.user) {
-                return location;
-            }
+            setLocations[props.username] = loc;
+            updateFireStoreLocations(loc);
         }
     };
 
@@ -172,20 +163,16 @@ const Controls = (props) => {
             return;
         }
         setLocations(props.locations);
+        for (const user in locations) {
+            if(user !== props.username && locations[user] !== '') {
+                setLocked({...locked, [locations[user]]: true})
+            }
+        }
     }, [props.locations]);
 
-    const updateFireStoreLocations = (loc, prevLoc) => {
-        const updateData = loc && prevLoc ?
-            {
-                [`locations.${loc}`]: props.user,
-                [`locations.${prevLoc}`]: ''
-            } : loc ?
-            {
-                [`locations.${loc}`]: props.user
-            } :
-            {
-                [`locations.${prevLoc}`]: ''
-            };
+    const updateFireStoreLocations = (loc) => {
+        const updateData = {[`locations.${props.username}`]: loc};
+
         db.collection('projects').doc(props.projectId).update(updateData)
             .then(() => {
                 console.log('updated locations successfully')
@@ -205,8 +192,7 @@ const Controls = (props) => {
     };
 
     const handleUserLeave = () => {
-          const prevLoc = getPrevLoc();
-          updateFireStoreLocations(null, prevLoc);
+          updateFireStoreLocations('');
     };
 
     const render = () => {
@@ -214,7 +200,7 @@ const Controls = (props) => {
             <Container className={classes.root}>
                 <Grid container spacing={3}>
                     <Grid item xs={1}>
-                        { locations.tempo === '' || locations.tempo === props.user ?
+                        { !locked.tempo ?
                             <FormControlLabel
                                 control={
                                     <Radio
@@ -222,11 +208,11 @@ const Controls = (props) => {
                                         checkedIcon={<Cancel />}
                                         value={'tempo'}
                                         onClick={() => handleLocationsChange('tempo')}
-                                        checked={locations.tempo === props.user}
+                                        checked={locations[props.username] === 'tempo'}
                                     />
                                 }
                             /> :
-                            <Avatar className={classes.avatar}>{ locations.tempo[0].toUpperCase() }</Avatar>
+                            <Avatar className={classes.avatar}>?</Avatar>
                         }
                     </Grid>
                     <Grid item xs={2}>
@@ -240,7 +226,7 @@ const Controls = (props) => {
                             marks={marks}
                             max={200}
                             min={40}
-                            disabled={locations.tempo !== props.user}
+                            disabled={locations[props.username] !== 'tempo'}
                             onChange={handleTempoChange}
                             onMouseUp={updateFireStoreControls}
                         />
@@ -248,7 +234,7 @@ const Controls = (props) => {
                 </Grid>
                 <Grid container spacing={3}>
                     <Grid item xs={1}>
-                        { locations.variation === '' || locations.variation === props.user ?
+                        { !locked.variation ?
                             <FormControlLabel
                                 control={
                                     <Radio
@@ -256,11 +242,11 @@ const Controls = (props) => {
                                         checkedIcon={<Cancel />}
                                         value={'variation'}
                                         onClick={() => handleLocationsChange('variation')}
-                                        checked={locations.variation === props.user}
+                                        checked={locations[props.username] === 'variation'}
                                     />
                                 }
                             /> :
-                            <Avatar className={classes.avatar}>{ locations.variation[0].toUpperCase() }</Avatar>
+                            <Avatar className={classes.avatar}>?</Avatar>
                         }
                     </Grid>
                     <Grid item xs={2}>
@@ -272,7 +258,7 @@ const Controls = (props) => {
                             valueLabelFormat={variation}
                             valueLabelDisplay="auto"
                             marks={varMarks}
-                            disabled={locations.variation !== props.user}
+                            disabled={locations[props.username] !== 'variation'}
                             onChange={handleVariationChange}
                             onMouseUp={updateFireStoreControls}
                         />
@@ -280,7 +266,7 @@ const Controls = (props) => {
                 </Grid>
                 <Grid container spacing={3}>
                     <Grid item xs={1}>
-                        {locations.loopLength === '' || locations.loopLength === props.user ?
+                        { !locked.loopLength ?
                             <FormControlLabel
                                 control={
                                     <Radio
@@ -288,11 +274,11 @@ const Controls = (props) => {
                                         checkedIcon={<Cancel/>}
                                         value={'loopLength'}
                                         onClick={() => handleLocationsChange('loopLength')}
-                                        checked={locations.loopLength === props.user}
+                                        checked={locations[props.username] === 'loopLength'}
                                     />
                                 }
                             /> :
-                            <Avatar className={classes.avatar}>{locations.loopLength[0].toUpperCase()}</Avatar>
+                            <Avatar className={classes.avatar}>?</Avatar>
                         }
                     </Grid>
                     <Grid item xs={2}>
@@ -307,7 +293,7 @@ const Controls = (props) => {
                             step={null}
                             max={8}
                             min={2}
-                            disabled={locations.loopLength !== props.user}
+                            disabled={locations[props.username] !== 'loopLength'}
                             onChange={handleLengthChange}
                             onMouseUp={updateFireStoreControls}
                         />
@@ -321,8 +307,26 @@ const Controls = (props) => {
 };
 
 function mapStateToProps(state) {
+    const user = state.auth.user.email;
+    let username = '';
+    if (user.includes('.com')) {
+        username = state.auth.user.email.split('.com')[0];
+    }
+    else if (user.includes('.ca')) {
+        username = state.auth.user.email.split('.ca')[0];
+    }
+    else if (user.includes('.org')) {
+        username = state.auth.user.email.split('.org')[0];
+    }
+    else if (user.includes('.net')) {
+        username = state.auth.user.email.split('.net')[0];
+    }
+    else {
+        username = state.auth.user.email.split('.')[0];
+    }
     return {
-        user: state.auth.user.email,
+        user: user,
+        username: username
     }
 }
 

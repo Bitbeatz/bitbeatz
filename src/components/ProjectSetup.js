@@ -63,7 +63,7 @@ const ProjectSetup = (props) => {
                 users: [props.user],
                 grid: DEFAULT_GRID,
                 controls: DEFAULT_CONTROLS,
-                locations: DEFAULT_LOCATIONS
+                locations: {[props.user]: ''}
             }).then((docRef) => {
                 setProjectId(docRef.id);
             }).catch((e) => {

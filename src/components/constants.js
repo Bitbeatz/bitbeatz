@@ -11,7 +11,7 @@ export const DEFAULT_CONTROLS = {
     loopLength: 4
 };
 export const DEFAULT_LOCATIONS = {
-    tempo: '',
-    variation: '',
-    loopLength: ''
+    tempo: false,
+    variation: false,
+    loopLength: false
 };
