@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import {ThemeProvider, withStyles} from '@material-ui/styles'
 
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
@@ -9,12 +8,12 @@ import Container from '@material-ui/core/Container'
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import Button from '@material-ui/core/Button'
 import Tooltip from '@material-ui/core/Tooltip'
-import { createMuiTheme } from '@material-ui/core/styles'
 import {db} from '../firebase/firebase';
 import {connect} from 'react-redux';
 import Share from './Share';
 
-import {DEFAULT_CONTROLS, DEFAULT_GRID} from './constants'
+import {DEFAULT_CONTROLS, DEFAULT_GRID, DEFAULT_LOCATIONS} from './constants'
+import withStyles from "@material-ui/core/styles/withStyles";
 
 const styles = () => ({
     paper: {
@@ -63,7 +62,8 @@ const ProjectSetup = (props) => {
                 genre: genre,
                 users: [props.user],
                 grid: DEFAULT_GRID,
-                controls: DEFAULT_CONTROLS
+                controls: DEFAULT_CONTROLS,
+                locations: DEFAULT_LOCATIONS
             }).then((docRef) => {
                 setProjectId(docRef.id);
             }).catch((e) => {

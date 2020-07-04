@@ -10,3 +10,8 @@ export const DEFAULT_CONTROLS = {
     variation: 10,
     loopLength: 4
 };
+export const DEFAULT_LOCATIONS = {
+    tempo: '',
+    variation: '',
+    loopLength: ''
+};

@@ -5,9 +5,10 @@ import Grid from '@material-ui/core/Grid'
 import {connect} from 'react-redux'
 import Slider from "@material-ui/core/Slider";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import {Build, Cancel} from "@material-ui/icons";
+import {Build, Cancel, Person} from "@material-ui/icons";
 import Radio from "@material-ui/core/Radio";
 import {db} from "../firebase/firebase";
+import {DEFAULT_CONTROLS, DEFAULT_LOCATIONS} from "./constants";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -101,10 +102,10 @@ const lengthMarks = [
 
 const Controls = (props) => {
     const classes = useStyles();
-    const [tempo, setTempo] = useState(100);
-    const [variation, setVariation] = useState(10);
-    const [loopLength, setLoopLength] = useState(4);
-    const [checked, setChecked] = useState('');
+    const [tempo, setTempo] = useState(DEFAULT_CONTROLS.tempo);
+    const [variation, setVariation] = useState(DEFAULT_CONTROLS.variation);
+    const [loopLength, setLoopLength] = useState(DEFAULT_CONTROLS.loopLength);
+    const [locations, setLocations] = useState(DEFAULT_LOCATIONS);
 
     const handleTempoChange = (event, newVal) => {
         setTempo(newVal);
@@ -141,13 +142,66 @@ const Controls = (props) => {
             .catch(e => console.error(e))
     };
 
-    const handleChecked = (val) => {
-        if (checked === val) {
-            setChecked('');
+    const handleLocationsChange = (loc) => {
+        let previousLoc = '';
+        if (locations[loc] === props.user) {
+            setLocations({...locations, [loc]: ''})
+        } else {
+            previousLoc = getPrevLoc();
+            setLocations({...locations, [previousLoc]: ''});
+            setLocations({...locations, [loc]: props.user});
         }
-        else {
-            setChecked(val);
+        updateFireStoreLocations(loc, previousLoc);
+    };
+
+    const getPrevLoc = () => {
+        for (const location in locations) {
+            if(locations[location] === props.user) {
+                return location;
+            }
         }
+    };
+
+    useEffect(() => {
+        if (!props.locations) {
+            return;
+        }
+        setLocations(props.locations);
+    }, [props.locations]);
+
+    const updateFireStoreLocations = (loc, prevLoc) => {
+        const updateData = loc && prevLoc ?
+            {
+                [`locations.${loc}`]: props.user,
+                [`locations.${prevLoc}`]: ''
+            } : loc ?
+            {
+                [`locations.${loc}`]: props.user
+            } :
+            {
+                [`locations.${prevLoc}`]: ''
+            };
+        db.collection('projects').doc(props.projectId).update(updateData)
+            .then(() => {
+                console.log('updated locations successfully')
+            })
+            .catch(e => console.error(e))
+    };
+
+    useEffect(() => {
+        setupBeforeUnloadListener();
+    }, []);
+
+    const setupBeforeUnloadListener = () => {
+        window.addEventListener("beforeunload", (ev) => {
+            ev.preventDefault();
+            return handleUserLeave();
+        });
+    };
+
+    const handleUserLeave = () => {
+          const prevLoc = getPrevLoc();
+          updateFireStoreLocations(null, prevLoc);
     };
 
     const render = () => {
@@ -156,14 +210,15 @@ const Controls = (props) => {
                 <Grid container spacing={3}>
                     <Grid item xs={1}>
                         <FormControlLabel
-                            control={
+                            control={ locations.tempo === '' || locations.tempo === props.user ?
                                 <Radio
                                     icon={<Build />}
                                     checkedIcon={<Cancel />}
                                     value={'tempo'}
-                                    onClick={() => handleChecked('tempo')}
-                                    checked={checked === 'tempo'}
-                                />
+                                    onClick={() => handleLocationsChange('tempo')}
+                                    checked={locations.tempo === props.user}
+                                /> :
+                                <Person />
                             }
                         />
                     </Grid>
@@ -178,7 +233,7 @@ const Controls = (props) => {
                             marks={marks}
                             max={200}
                             min={40}
-                            disabled={checked !== 'tempo'}
+                            disabled={locations.tempo !== props.user}
                             onChange={handleTempoChange}
                             onMouseUp={updateFireStoreControls}
                         />
@@ -187,14 +242,15 @@ const Controls = (props) => {
                 <Grid container spacing={3}>
                     <Grid item xs={1}>
                         <FormControlLabel
-                            control={
+                            control={ locations.variation === '' || locations.variation === props.user ?
                                 <Radio
                                     icon={<Build />}
                                     checkedIcon={<Cancel />}
                                     value={'variation'}
-                                    onClick={() => handleChecked('variation')}
-                                    checked={checked === 'variation'}
-                                />
+                                    onClick={() => handleLocationsChange('variation')}
+                                    checked={locations.variation === props.user}
+                                /> :
+                                <Person />
                             }
                         />
                     </Grid>
@@ -207,7 +263,7 @@ const Controls = (props) => {
                             valueLabelFormat={variation}
                             valueLabelDisplay="auto"
                             marks={varMarks}
-                            disabled={checked !== 'variation'}
+                            disabled={locations.variation !== props.user}
                             onChange={handleVariationChange}
                             onMouseUp={updateFireStoreControls}
                         />
@@ -216,14 +272,15 @@ const Controls = (props) => {
                 <Grid container spacing={3}>
                     <Grid item xs={1}>
                         <FormControlLabel
-                            control={
+                            control={ locations.loopLength === '' || locations.loopLength === props.user ?
                                 <Radio
                                     icon={<Build />}
                                     checkedIcon={<Cancel />}
-                                    value={'length'}
-                                    onClick={() => handleChecked('length')}
-                                    checked={checked === 'length'}
-                                />
+                                    value={'loopLength'}
+                                    onClick={() => handleLocationsChange('loopLength')}
+                                    checked={locations.loopLength === props.user}
+                                /> :
+                                <Person />
                             }
                         />
                     </Grid>
@@ -239,7 +296,7 @@ const Controls = (props) => {
                             step={null}
                             max={8}
                             min={2}
-                            disabled={checked !== 'length'}
+                            disabled={locations.loopLength !== props.user}
                             onChange={handleLengthChange}
                             onMouseUp={updateFireStoreControls}
                         />
