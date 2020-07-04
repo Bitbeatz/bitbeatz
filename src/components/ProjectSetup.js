@@ -14,7 +14,7 @@ import {db} from '../firebase/firebase';
 import {connect} from 'react-redux';
 import Share from './Share';
 
-import { DEFAULT_GRID } from './constants'
+import {DEFAULT_CONTROLS, DEFAULT_GRID} from './constants'
 
 const styles = () => ({
     paper: {
@@ -63,6 +63,7 @@ const ProjectSetup = (props) => {
                 genre: genre,
                 users: [props.user],
                 grid: DEFAULT_GRID,
+                controls: DEFAULT_CONTROLS
             }).then((docRef) => {
                 setProjectId(docRef.id);
             }).catch((e) => {

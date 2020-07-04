@@ -100,7 +100,7 @@ const Project = (props) => {
                                     <Grid container spacing={3}>
                                         <Grid item xs={9}>
                                             <Paper className={classes.paper}>
-                                                <Controls />
+                                                <Controls projectId={projectId} controls={project.controls} />
                                             </Paper>
                                         </Grid>
                                         <Grid item xs={3}>

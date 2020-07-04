@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
@@ -7,6 +7,7 @@ import Slider from "@material-ui/core/Slider";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import {Build, Cancel} from "@material-ui/icons";
 import Radio from "@material-ui/core/Radio";
+import {db} from "../firebase/firebase";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -117,6 +118,29 @@ const Controls = (props) => {
         setLoopLength(newVal);
     };
 
+    useEffect(() => {
+        if (!props.controls) {
+            return;
+        }
+        setTempo(props.controls.tempo);
+        setVariation(props.controls.variation);
+        setLoopLength(props.controls.loopLength);
+    }, [props.controls]);
+
+    const updateFireStoreControls = () => {
+        db.collection('projects').doc(props.projectId).update({
+            controls:
+                { tempo: tempo,
+                variation: variation,
+                loopLength: loopLength
+                }
+        })
+            .then(() => {
+                console.log('updated controls successfully')
+            })
+            .catch(e => console.error(e))
+    };
+
     const handleChecked = (val) => {
         if (checked === val) {
             setChecked('');
@@ -156,6 +180,7 @@ const Controls = (props) => {
                             min={40}
                             disabled={checked !== 'tempo'}
                             onChange={handleTempoChange}
+                            onMouseUp={updateFireStoreControls}
                         />
                     </Grid>
                 </Grid>
@@ -184,6 +209,7 @@ const Controls = (props) => {
                             marks={varMarks}
                             disabled={checked !== 'variation'}
                             onChange={handleVariationChange}
+                            onMouseUp={updateFireStoreControls}
                         />
                     </Grid>
                 </Grid>
@@ -215,6 +241,7 @@ const Controls = (props) => {
                             min={2}
                             disabled={checked !== 'length'}
                             onChange={handleLengthChange}
+                            onMouseUp={updateFireStoreControls}
                         />
                     </Grid>
                 </Grid>
