@@ -27,6 +27,11 @@ const useStyles = makeStyles((theme) => ({
         padding: 50,
         textAlign: 'center',
         color: theme.palette.text.secondary,
+    },
+    gridPaper: {
+        padding: 20,
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
     }
 }));
 
@@ -71,11 +76,13 @@ const Project = (props) => {
                         <div>
                             <Grid container spacing={3} justify="flex-start" alignItems="flex-start">
                                 <Grid item xs={9}>
+                                    <Paper className={classes.gridPaper}>
                                     <Box justifyContent="flex-start" alignItems="flex-start">
-                                        <NoteGrid />
+                                        <NoteGrid projectId={projectId} isNewProject={isNewProject}/>
                                     </Box>
+                                    </Paper>
                                 </Grid>
-                                <Grid item xs>
+                                <Grid item xs={3}>
                                     <Paper className={classes.paper}>Chat</Paper>
                                 </Grid>
                             </Grid>
