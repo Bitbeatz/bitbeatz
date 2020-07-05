@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import {connect} from 'react-redux'
 import get from 'lodash/get'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import { Container, Grid, Paper, Toolbar, IconButton, AppBar, Typography, Box } from '@material-ui/core'
-import {NavigateBefore, NavigateNext, PauseCircleFilled, PlayCircleFilled, VideocamOff} from '@material-ui/icons'
+import { Container, Grid, Paper, Switch, Toolbar, IconButton, AppBar, Typography, Box } from '@material-ui/core'
+import {Build, Cancel, NavigateBefore, NavigateNext, PauseCircleFilled, PlayCircleFilled, VideocamOff} from '@material-ui/icons'
 
 import { ProjectSetup } from './index'
 import Controls from './Controls'
+import ControlsNoLocks from './ControlsNoLocks'
 import {db} from '../firebase/firebase'
 import NoteGrid from './NoteGrid'
 import Chat from './Chat'
@@ -60,6 +61,15 @@ const Project = (props) => {
             })
     }, [projectId])
 
+    const handleLockingUpdate = (newState) => {
+        db.collection('projects').doc(projectId).update({
+            locksDisabled: newState
+        })
+            .then(() => {
+            })
+            .catch(e => console.error(e))
+    }
+
     const render = () => {
         return (
             <div>
@@ -84,6 +94,13 @@ const Project = (props) => {
                                         Share Code: { projectId }
                                         </Typography>
                                     </Grid>
+                                    <Grid>
+                                        <Switch
+                                            name={'lockingDisabled'}
+                                            onChange={(e) => handleLockingUpdate(e.target.checked)}
+                                            checked={project.locksDisabled}
+                                        />
+                                    </Grid>
                                 </Grid>
                             </Toolbar>
                         </AppBar>
@@ -101,7 +118,10 @@ const Project = (props) => {
                                 <Grid container spacing={3}>
                                     <Grid item xs={9}>
                                         <Paper className={classes.paper}>
-                                            <Controls projectId={projectId} locations={project.locations} controls={project.controls} />
+                                            { project.locksDisabled
+                                                ? <ControlsNoLocks projectId={projectId} controls={project.controls} />
+                                                : <Controls projectId={projectId} locations={project.locations} controls={project.controls} />
+                                            }
                                         </Paper>
                                     </Grid>
                                     <Grid item xs={3}>

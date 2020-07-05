@@ -59,12 +59,13 @@ const ProjectSetup = (props) => {
         else {
             // TODO change from .jazz to genre after making more consts
             await db.collection('projects').add({
-                name: projectName,
-                genre: genre,
-                users: [props.user],
-                grid: DEFAULT_GRIDS.jazz,
                 controls: DEFAULT_CONTROLS,
-                locations: {[props.user]: ''}
+                genre: genre,
+                grid: DEFAULT_GRIDS.jazz,
+                locations: {[props.user]: ''},
+                locksDisabled: false,
+                name: projectName,
+                users: [props.user],
             }).then((docRef) => {
                 setProjectId(docRef.id);
             }).catch((e) => {
