@@ -163,11 +163,17 @@ const Controls = (props) => {
             return;
         }
         setLocations(props.locations);
-        for (const user in locations) {
-            if(user !== props.username && locations[user] !== '') {
-                setLocked({...locked, [locations[user]]: true})
+        let lockObj = {};
+        for (const user in props.locations) {
+            if(user !== props.username) {
+                lockObj[props.locations[user]] = user;
             }
         }
+        setLocked({
+            tempo: lockObj.tempo ? lockObj.tempo.toUpperCase()[0] : '',
+            variation: lockObj.variation ? lockObj.variation.toUpperCase()[0] : '',
+            loopLength: lockObj.loopLength ? lockObj.loopLength.toUpperCase()[0] : ''
+        })
     }, [props.locations]);
 
     const updateFireStoreLocations = (loc) => {
@@ -212,7 +218,7 @@ const Controls = (props) => {
                                     />
                                 }
                             /> :
-                            <Avatar className={classes.avatar}>?</Avatar>
+                            <Avatar className={classes.avatar}>{locked.tempo}</Avatar>
                         }
                     </Grid>
                     <Grid item xs={2}>
@@ -246,7 +252,7 @@ const Controls = (props) => {
                                     />
                                 }
                             /> :
-                            <Avatar className={classes.avatar}>?</Avatar>
+                            <Avatar className={classes.avatar}>{locked.variation}</Avatar>
                         }
                     </Grid>
                     <Grid item xs={2}>
@@ -278,7 +284,7 @@ const Controls = (props) => {
                                     />
                                 }
                             /> :
-                            <Avatar className={classes.avatar}>?</Avatar>
+                            <Avatar className={classes.avatar}>{locked.loopLength}</Avatar>
                         }
                     </Grid>
                     <Grid item xs={2}>

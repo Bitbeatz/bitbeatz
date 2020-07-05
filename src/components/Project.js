@@ -26,7 +26,8 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
     },
     containerPaper: {
-        color: theme.palette.text.secondary
+        color: theme.palette.text.secondary,
+        backgroundColor: '#182f50'
     },
     overflow: {
         overflow: 'hidden'
@@ -104,7 +105,7 @@ const Project = (props) => {
                                             </Paper>
                                         </Grid>
                                         <Grid item xs={3}>
-                                            <Grid container spacing={3}>
+                                            <Grid container spacing={0}>
                                                 <Grid item xs={12}>
                                                     <Paper className={[classes.paper, classes.cam]}>
                                                         <IconButton>
