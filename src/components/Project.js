@@ -93,7 +93,7 @@ const Project = (props) => {
                                     <Grid item xs={12}>
                                         <Paper className={classes.gridPaper}>
                                             <Box justifyContent="flex-start" alignItems="flex-start" className={classes.overflow}>
-                                                <NoteGrid projectId={projectId} grid={project.grid}/>
+                                                <NoteGrid projectId={projectId} grid={project.grid} controls={project.controls}/>
                                             </Box>
                                         </Paper>
                                     </Grid>

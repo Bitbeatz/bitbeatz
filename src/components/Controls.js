@@ -127,6 +127,7 @@ const Controls = (props) => {
 
     const handleLengthChange = (event, newVal) => {
         setLoopLength(newVal);
+        updateFireStoreControls();
     };
 
     useEffect(() => {
@@ -305,7 +306,6 @@ const Controls = (props) => {
                             min={2}
                             disabled={locations[props.username] !== 'loopLength'}
                             onChange={handleLengthChange}
-                            onMouseUp={updateFireStoreControls}
                         />
                     </Grid>
                 </Grid>

@@ -62,6 +62,18 @@ class NoteGrid extends Component {
         if (this.props.grid && this.props.grid !== prevProps.grid) {
             this.setState({ grid: this.props.grid })
         }
+        if (this.props.controls && this.props.controls !== prevProps.controls) {
+            const loopLength = this.props.controls.loopLength * 3;
+            const newGrid = {0: [], 1: [], 2: [], 3: [], 4: []};
+            Object.keys(this.props.grid).map((row, i) => {
+                this.props.grid[row].map((col, j) => {
+                    if (j < loopLength) {
+                        newGrid[row].push(this.props.grid[row][j]);
+                    }
+                });
+            });
+            this.setState({ grid: newGrid });
+        }
     }
 
     handleLabelClick = (event) => {
@@ -118,16 +130,16 @@ class NoteGrid extends Component {
                 </Grid>
                 <Grid container spacing={0}>
                     { Object.keys(this.state.grid).map((row, i) => (
-                        <Grid item key={i} spacing={0}>
+                        <Grid container key={i} spacing={0}>
                             <ButtonGroup className={classes.buttonGroup} size="medium">
                                 { this.state.grid[row].map((active, j) => (
-                                <Button
-                                    id={(i*24)+j}
+                                    <Button
+                                    id={(i * 24) + j}
                                     className={classes.button}
-                                    style={{ backgroundColor: active ? 'red' : 'white' }}
+                                    style={{backgroundColor: active ? 'red' : 'white'}}
                                     onClick={this.handleGridClick}>
-                                </Button>
-                            ))}
+                                    </Button>
+                                ))}
                             </ButtonGroup>
                         </Grid>
                     ))}
