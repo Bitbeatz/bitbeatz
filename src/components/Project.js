@@ -53,12 +53,13 @@ const Project = (props) => {
     const [project, setProject] = useState({})
 
     useEffect(() => {
-        db.collection('projects').doc(projectId)
+        const unsubscribe = db.collection('projects').doc(projectId)
             .onSnapshot((doc) => {
                 if (doc.exists) {
                     setProject(doc.data())
                 }
             })
+        return unsubscribe
     }, [projectId])
 
     const handleLockingUpdate = (newState) => {
