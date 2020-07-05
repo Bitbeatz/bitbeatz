@@ -114,7 +114,7 @@ class NoteGrid extends Component {
         const { classes } = this.props
         return (
             <Box display="flex" flexDirection="row" >
-                <Grid container spacing={0} direction="column">
+                <Grid container spacing={0} direction="column" xs={2}>
                     { Object.keys(this.state.drums).map((drum_sound, i) => (
                         <Grid container item key={i} spacing={0}>
                             <Button id={this.state.drums[i]} fullWidth variant="text" size="small" onClick={this.handleLabelClick}>{this.state.drums[i]}</Button>
