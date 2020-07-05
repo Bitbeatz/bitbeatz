@@ -81,7 +81,7 @@ const Project = (props) => {
                                     </Grid>
                                     <Grid item xs={2}>
                                         <Typography variant="body2">
-                                        Share Code: {projectId}
+                                        Share Code: { projectId }
                                         </Typography>
                                     </Grid>
                                 </Grid>
@@ -109,11 +109,11 @@ const Project = (props) => {
                                             <Grid item xs={12}>
                                                 <Paper className={[classes.paper, classes.cam]}>
                                                     <IconButton>
-                                                        <NavigateBefore color={"primary"} />
+                                                        <NavigateBefore color={'primary'} />
                                                     </IconButton>
-                                                    <VideocamOff color={"secondary"} />
+                                                    <VideocamOff color={'secondary'} />
                                                     <IconButton>
-                                                        <NavigateNext color={"primary"} />
+                                                        <NavigateNext color={'primary'} />
                                                     </IconButton>
                                                 </Paper>
                                             </Grid>
