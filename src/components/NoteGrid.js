@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import get from 'lodash/get'
 import { withStyles } from '@material-ui/styles'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -38,6 +39,7 @@ class NoteGrid extends Component {
         console.log(props)
         this.state = {
             grid: props.grid || DEFAULT_GRIDS.jazz,
+            loopLength: get(props, 'controls.loopLength', 2),
             drums: {
                 0: "Ride", // Ride Cymbal
                 1: "Bass", // Bass Drum
@@ -55,17 +57,9 @@ class NoteGrid extends Component {
         if (this.props.grid && this.props.grid !== prevProps.grid) {
             this.setState({ grid: this.props.grid })
         }
-        if (this.props.controls && this.props.controls !== prevProps.controls) {
-            const loopLength = this.props.controls.loopLength * 3;
-            const newGrid = {0: [], 1: [], 2: [], 3: [], 4: []};
-            Object.keys(this.props.grid).forEach((row, i) => {
-                this.props.grid[row].forEach((col, j) => {
-                    if (j < loopLength) {
-                        newGrid[row].push(this.props.grid[row][j]);
-                    }
-                });
-            });
-            this.setState({ grid: newGrid });
+        const newLoopLength = get(this.props, 'controls.loopLength')
+        if (newLoopLength && newLoopLength !== prevState.loopLength) {
+            this.setState({ loopLength: newLoopLength });
         }
     }
 
@@ -126,7 +120,7 @@ class NoteGrid extends Component {
                         <Grid container key={i} spacing={0}>
                             <ButtonGroup className={classes.buttonGroup} size="medium">
                                 { this.state.grid[row].map((active, j) => (
-                                    <Button
+                                    j < this.state.loopLength * 3 && <Button
                                     id={(i * 24) + j}
                                     key={(i * 24) + j}
                                     className={classes.button}

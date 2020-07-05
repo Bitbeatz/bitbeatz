@@ -8,7 +8,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import {Build, Cancel } from '@material-ui/icons';
 import Radio from '@material-ui/core/Radio';
 import {db} from '../firebase/firebase';
-import {DEFAULT_CONTROLS, DEFAULT_LOCATIONS} from './constants';
+import {DEFAULT_CONTROLS, DEFAULT_LOCATIONS, lengthMarks, varMarks, marks} from './constants';
 import {Avatar} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 
@@ -28,86 +28,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const marks = [
-    {
-        value: 40,
-        label: '40',
-    },
-    {
-        value: 60,
-        label: '60',
-    },
-    {
-        value: 80,
-        label: '80',
-    },
-    {
-        value: 100,
-        label: '100',
-    },
-    {
-        value: 120,
-        label: '120',
-    },
-    {
-        value: 140,
-        label: '140',
-    },
-    {
-        value: 160,
-        label: '160',
-    },
-    {
-        value: 180,
-        label: '180',
-    },
-    {
-        value: 200,
-        label: '200',
-    }
-];
 
-const varMarks = [
-    {
-        value: 0,
-        label: '0%',
-    },
-    {
-        value: 20,
-        label: '20%',
-    },
-    {
-        value: 40,
-        label: '40%',
-    },
-    {
-        value: 60,
-        label: '60%',
-    },
-    {
-        value: 80,
-        label: '80%',
-    },
-    {
-        value: 100,
-        label: '100%',
-    }
-];
-
-const lengthMarks = [
-    {
-        value: 2,
-        label: '2',
-    },
-    {
-        value: 4,
-        label: '4',
-    },
-    {
-        value: 8,
-        label: '8',
-    }
-];
 
 const Controls = (props) => {
     const classes = useStyles();
@@ -116,6 +37,42 @@ const Controls = (props) => {
     const [loopLength, setLoopLength] = useState(DEFAULT_CONTROLS.loopLength);
     const [locations, setLocations] = useState({[props.username]: ''});
     const [locked, setLocked] = useState(DEFAULT_LOCATIONS);
+
+    useEffect(() => {
+        window.addEventListener('beforeunload', (ev) => {
+            ev.preventDefault();
+            updateFireStoreLocations('');
+        });
+    }, []);
+
+    useEffect(() => {
+        if (!props.controls) {
+            return;
+        }
+        setTempo(props.controls.tempo);
+        setVariation(props.controls.variation);
+        setLoopLength(props.controls.loopLength);
+    }, [props.controls]);
+
+    useEffect(() => updateFireStoreControls(), [loopLength])
+
+    useEffect(() => {
+        if (!props.locations) {
+            return;
+        }
+        setLocations(props.locations);
+        const lockObj = {};
+        for (const user in props.locations) {
+            if(user !== props.username) {
+                lockObj[props.locations[user]] = user;
+            }
+        }
+        setLocked({
+            tempo: lockObj.tempo ? lockObj.tempo.toUpperCase()[0] : '',
+            variation: lockObj.variation ? lockObj.variation.toUpperCase()[0] : '',
+            loopLength: lockObj.loopLength ? lockObj.loopLength.toUpperCase()[0] : ''
+        })
+    }, [props.locations, props.username]);
 
     const handleTempoChange = (event, newVal) => {
         setTempo(newVal);
@@ -127,17 +84,8 @@ const Controls = (props) => {
 
     const handleLengthChange = (event, newVal) => {
         setLoopLength(newVal);
-        updateFireStoreControls();
     };
 
-    useEffect(() => {
-        if (!props.controls) {
-            return;
-        }
-        setTempo(props.controls.tempo);
-        setVariation(props.controls.variation);
-        setLoopLength(props.controls.loopLength);
-    }, [props.controls]);
 
     const updateFireStoreControls = () => {
         db.collection('projects').doc(props.projectId).update({
@@ -163,24 +111,6 @@ const Controls = (props) => {
         }
     };
 
-    useEffect(() => {
-        if (!props.locations) {
-            return;
-        }
-        setLocations(props.locations);
-        const lockObj = {};
-        for (const user in props.locations) {
-            if(user !== props.username) {
-                lockObj[props.locations[user]] = user;
-            }
-        }
-        setLocked({
-            tempo: lockObj.tempo ? lockObj.tempo.toUpperCase()[0] : '',
-            variation: lockObj.variation ? lockObj.variation.toUpperCase()[0] : '',
-            loopLength: lockObj.loopLength ? lockObj.loopLength.toUpperCase()[0] : ''
-        })
-    }, [props.locations, props.username]);
-
     const updateFireStoreLocations = (loc) => {
         const updateData = {[`locations.${props.username}`]: loc};
 
@@ -190,13 +120,6 @@ const Controls = (props) => {
             })
             .catch(e => console.error(e))
     };
-
-    useEffect(() => {
-        window.addEventListener('beforeunload', (ev) => {
-            ev.preventDefault();
-            return () => updateFireStoreLocations('');
-        });
-    }, []);
 
     const render = () => {
         return (
