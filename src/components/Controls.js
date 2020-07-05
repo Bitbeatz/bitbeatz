@@ -179,7 +179,7 @@ const Controls = (props) => {
             variation: lockObj.variation ? lockObj.variation.toUpperCase()[0] : '',
             loopLength: lockObj.loopLength ? lockObj.loopLength.toUpperCase()[0] : ''
         })
-    }, [props.locations]);
+    }, [props.locations, props.username]);
 
     const updateFireStoreLocations = (loc) => {
         const updateData = {[`locations.${props.username}`]: loc};
@@ -192,19 +192,11 @@ const Controls = (props) => {
     };
 
     useEffect(() => {
-        setupBeforeUnloadListener();
-    }, []);
-
-    const setupBeforeUnloadListener = () => {
         window.addEventListener('beforeunload', (ev) => {
             ev.preventDefault();
-            return handleUserLeave();
+            return () => updateFireStoreLocations('');
         });
-    };
-
-    const handleUserLeave = () => {
-        updateFireStoreLocations('');
-    };
+    }, []);
 
     const render = () => {
         return (
@@ -232,7 +224,6 @@ const Controls = (props) => {
                     <Grid item xs>
                         <Slider
                             value={tempo}
-                            valueLabelFormat={tempo}
                             valueLabelDisplay="auto"
                             marks={marks}
                             max={200}
@@ -266,7 +257,6 @@ const Controls = (props) => {
                     <Grid item xs>
                         <Slider
                             value={variation}
-                            valueLabelFormat={variation}
                             valueLabelDisplay="auto"
                             marks={varMarks}
                             disabled={locations[props.username] !== 'variation'}
@@ -298,7 +288,6 @@ const Controls = (props) => {
                     <Grid item xs>
                         <Slider
                             value={loopLength}
-                            valueLabelFormat={loopLength}
                             valueLabelDisplay="auto"
                             marks={lengthMarks}
                             step={null}
