@@ -14,6 +14,7 @@ import Chat from './Chat'
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
+        padding: theme.spacing(3),
     },
     paper: {
         padding: 50,
@@ -86,48 +87,46 @@ const Project = (props) => {
                                 </Grid>
                             </Toolbar>
                         </AppBar>
-                        <Paper className={classes.containerPaper}>
-                            <Container maxWidth="xl" className={classes.root}>
-                                <Grid>
-                                    <Grid container spacing={3} justify="flex-start" alignItems="flex-start">
-                                        <Grid item xs={12}>
-                                            <Paper className={classes.gridPaper}>
-                                                <Box justifyContent="flex-start" alignItems="flex-start" className={classes.overflow}>
-                                                    <NoteGrid projectId={projectId} grid={project.grid}/>
-                                                </Box>
-                                            </Paper>
-                                        </Grid>
+                        <Container maxWidth="xl" className={classes.root}>
+                            <Grid>
+                                <Grid container spacing={3} justify="flex-start" alignItems="flex-start">
+                                    <Grid item xs={12}>
+                                        <Paper className={classes.gridPaper}>
+                                            <Box justifyContent="flex-start" alignItems="flex-start" className={classes.overflow}>
+                                                <NoteGrid projectId={projectId} grid={project.grid}/>
+                                            </Box>
+                                        </Paper>
                                     </Grid>
-                                    <Grid container spacing={3}>
-                                        <Grid item xs={9}>
-                                            <Paper className={classes.paper}>
-                                                <Controls projectId={projectId} locations={project.locations} controls={project.controls} />
-                                            </Paper>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <Grid container spacing={0}>
-                                                <Grid item xs={12}>
-                                                    <Paper className={[classes.paper, classes.cam]}>
-                                                        <IconButton>
-                                                            <NavigateBefore color={"primary"} />
-                                                        </IconButton>
-                                                        <VideocamOff color={"secondary"} />
-                                                        <IconButton>
-                                                            <NavigateNext color={"primary"} />
-                                                        </IconButton>
-                                                    </Paper>
-                                                </Grid>
-                                                <Grid item xs={12}>
-                                                    <Paper className={classes.section}>
-                                                        <Chat projectId={projectId} messages={project.chatMessages}/>
-                                                    </Paper>
-                                                </Grid>
+                                </Grid>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={9}>
+                                        <Paper className={classes.paper}>
+                                            <Controls projectId={projectId} locations={project.locations} controls={project.controls} />
+                                        </Paper>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Grid container spacing={0}>
+                                            <Grid item xs={12}>
+                                                <Paper className={[classes.paper, classes.cam]}>
+                                                    <IconButton>
+                                                        <NavigateBefore color={"primary"} />
+                                                    </IconButton>
+                                                    <VideocamOff color={"secondary"} />
+                                                    <IconButton>
+                                                        <NavigateNext color={"primary"} />
+                                                    </IconButton>
+                                                </Paper>
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <Paper className={classes.section}>
+                                                    <Chat projectId={projectId} messages={project.chatMessages}/>
+                                                </Paper>
                                             </Grid>
                                         </Grid>
                                     </Grid>
                                 </Grid>
-                            </Container>
-                        </Paper>
+                            </Grid>
+                        </Container>
                     </div>
                 }
             </div>
