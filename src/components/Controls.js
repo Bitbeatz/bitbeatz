@@ -194,7 +194,7 @@ const Controls = (props) => {
     useEffect(() => {
         window.addEventListener('beforeunload', (ev) => {
             ev.preventDefault();
-            return () => updateFireStoreLocations('');
+            updateFireStoreLocations('');
         });
     }, []);
 
