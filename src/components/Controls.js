@@ -3,13 +3,13 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import {connect} from 'react-redux'
-import Slider from "@material-ui/core/Slider";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import {Build, Cancel, Person} from "@material-ui/icons";
-import Radio from "@material-ui/core/Radio";
-import {db} from "../firebase/firebase";
-import {DEFAULT_CONTROLS, DEFAULT_LOCATIONS} from "./constants";
-import {Avatar} from "@material-ui/core";
+import Slider from '@material-ui/core/Slider';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import {Build, Cancel } from '@material-ui/icons';
+import Radio from '@material-ui/core/Radio';
+import {db} from '../firebase/firebase';
+import {DEFAULT_CONTROLS, DEFAULT_LOCATIONS} from './constants';
+import {Avatar} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -138,8 +138,8 @@ const Controls = (props) => {
         db.collection('projects').doc(props.projectId).update({
             controls:
                 { tempo: tempo,
-                variation: variation,
-                loopLength: loopLength
+                    variation: variation,
+                    loopLength: loopLength
                 }
         })
             .then(() => {
@@ -163,7 +163,7 @@ const Controls = (props) => {
             return;
         }
         setLocations(props.locations);
-        let lockObj = {};
+        const lockObj = {};
         for (const user in props.locations) {
             if(user !== props.username) {
                 lockObj[props.locations[user]] = user;
@@ -191,14 +191,14 @@ const Controls = (props) => {
     }, []);
 
     const setupBeforeUnloadListener = () => {
-        window.addEventListener("beforeunload", (ev) => {
+        window.addEventListener('beforeunload', (ev) => {
             ev.preventDefault();
             return handleUserLeave();
         });
     };
 
     const handleUserLeave = () => {
-          updateFireStoreLocations('');
+        updateFireStoreLocations('');
     };
 
     const render = () => {
@@ -218,7 +218,7 @@ const Controls = (props) => {
                                     />
                                 }
                             /> :
-                            <Avatar className={classes.avatar}>{locked.tempo}</Avatar>
+                            <Avatar className={classes.avatar}>{ locked.tempo }</Avatar>
                         }
                     </Grid>
                     <Grid item xs={2}>
@@ -252,7 +252,7 @@ const Controls = (props) => {
                                     />
                                 }
                             /> :
-                            <Avatar className={classes.avatar}>{locked.variation}</Avatar>
+                            <Avatar className={classes.avatar}>{ locked.variation }</Avatar>
                         }
                     </Grid>
                     <Grid item xs={2}>
@@ -284,7 +284,7 @@ const Controls = (props) => {
                                     />
                                 }
                             /> :
-                            <Avatar className={classes.avatar}>{locked.loopLength}</Avatar>
+                            <Avatar className={classes.avatar}>{ locked.loopLength }</Avatar>
                         }
                     </Grid>
                     <Grid item xs={2}>

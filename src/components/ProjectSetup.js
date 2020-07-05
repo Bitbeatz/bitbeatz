@@ -12,8 +12,8 @@ import {db} from '../firebase/firebase';
 import {connect} from 'react-redux';
 import Share from './Share';
 
-import {DEFAULT_CONTROLS, DEFAULT_GRID, DEFAULT_LOCATIONS} from './constants'
-import withStyles from "@material-ui/core/styles/withStyles";
+import {DEFAULT_CONTROLS, DEFAULT_GRID } from './constants'
+import withStyles from '@material-ui/core/styles/withStyles';
 
 const styles = () => ({
     paper: {
