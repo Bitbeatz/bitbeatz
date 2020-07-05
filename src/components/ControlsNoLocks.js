@@ -127,6 +127,7 @@ const Controls = (props) => {
 
     const handleLengthChange = (event, newVal) => {
         setLoopLength(newVal);
+        updateFireStoreControls();
     };
 
     useEffect(() => {
@@ -156,18 +157,6 @@ const Controls = (props) => {
         return (
             <Container className={classes.root}>
                 <Grid container spacing={3}>
-                    <Grid item xs={1}>
-                        <FormControlLabel
-                            control={
-                                <Radio
-                                    icon={<Build />}
-                                    value={'tempo'}
-                                    onClick={() => setTempoChecked(!tempoChecked)}
-                                    checked={false}
-                                />
-                            }
-                        />
-                    </Grid>
                     <Grid item xs={2}>
                         Tempo (bpm)
                     </Grid>
@@ -185,18 +174,6 @@ const Controls = (props) => {
                     </Grid>
                 </Grid>
                 <Grid container spacing={3}>
-                    <Grid item xs={1}>
-                        <FormControlLabel
-                            control={
-                                <Radio
-                                    icon={<Build />}
-                                    value={'variation'}
-                                    onClick={() => setVariationChecked(!variationChecked)}
-                                    checked={false}
-                                />
-                            }
-                        />
-                    </Grid>
                     <Grid item xs={2}>
                         Random Variation
                     </Grid>
@@ -212,18 +189,6 @@ const Controls = (props) => {
                     </Grid>
                 </Grid>
                 <Grid container spacing={3}>
-                    <Grid item xs={1}>
-                        <FormControlLabel
-                            control={
-                                <Radio
-                                    icon={<Build/>}
-                                    value={'loopLength'}
-                                    onClick={() => setLoopLengthChecked(!loopLengthChecked)}
-                                    checked={false}
-                                />
-                            }
-                        />
-                    </Grid>
                     <Grid item xs={2}>
                         Loop Length (beats)
                     </Grid>
@@ -237,7 +202,6 @@ const Controls = (props) => {
                             max={8}
                             min={2}
                             onChange={handleLengthChange}
-                            onMouseUp={updateFireStoreControls}
                         />
                     </Grid>
                 </Grid>
