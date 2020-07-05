@@ -13,7 +13,7 @@ import { ButtonGroup } from '@material-ui/core';
 import get from 'lodash/get'
 
 import {db} from '../firebase/firebase';
-import { DEFAULT_GRID } from './constants'
+import { DEFAULT_GRIDS } from './constants'
 
 const styles = () => ({
     '@global': {
@@ -33,18 +33,18 @@ const styles = () => ({
         padding: 0,
         height: "auto"
     }
-    
+
 })
 
 
 class NoteGrid extends Component {
-    
+
     constructor(props) {
         super(props);
-        
+
         console.log(props)
         this.state = {
-            grid: props.grid || DEFAULT_GRID,
+            grid: props.grid || DEFAULT_GRIDS.jazz,
             drums: {
                 0: "Ride", // Ride Cymbal
                 1: "Bass", // Bass Drum
@@ -53,9 +53,9 @@ class NoteGrid extends Component {
                 4: "Low Tom", // Low Tom
             }
         }
-        
+
         this.handleGridClick = this.handleGridClick.bind(this)
-        this.handleLabelClick = this.handleLabelClick.bind(this)        
+        this.handleLabelClick = this.handleLabelClick.bind(this)
     }
 
     componentDidUpdate(prevProps) {
@@ -63,12 +63,12 @@ class NoteGrid extends Component {
             this.setState({ grid: this.props.grid })
         }
     }
-    
+
     handleLabelClick = (event) => {
         // Do whatever needs to be done when label is clicked
         // Play the sound?
     }
-    
+
     handleGridClick = (event) => {
         // Handle update to grid square
         // Update grid locally (change grid colour and state)
@@ -78,20 +78,20 @@ class NoteGrid extends Component {
         var val = this.state.grid[row][col]
         var newGrid = this.state.grid
         console.log(row, col, id)
-        
+
         if(val === 1) {
             newGrid[row][col] = 0
             event.target.style.color = "black"
             event.target.style.backgroundColor = "white"
             event.target.variant = 'contained'
-            
+
         } else {
             newGrid[row][col] = 1
             event.target.style.color = "black"
             event.target.style.backgroundColor = "red"
             event.target.variant = 'outlined'
         }
-        
+
         this.updateFireStore(newGrid)
     }
 
@@ -104,7 +104,7 @@ class NoteGrid extends Component {
             })
             .catch(e => console.error(e))
     }
-    
+
     render = () => {
         const { classes } = this.props
         return (
@@ -135,7 +135,7 @@ class NoteGrid extends Component {
             </Box>
             )
     }
-    
+
 }
 
 export default withStyles(styles)(NoteGrid)

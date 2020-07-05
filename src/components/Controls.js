@@ -10,6 +10,7 @@ import Radio from '@material-ui/core/Radio';
 import {db} from '../firebase/firebase';
 import {DEFAULT_CONTROLS, DEFAULT_LOCATIONS} from './constants';
 import {Avatar} from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
     avatar: {
         width: theme.spacing(3),
         height: theme.spacing(3),
+    },
+    generateButton: {
+        marginTop: 20
     }
 }));
 
@@ -305,6 +309,9 @@ const Controls = (props) => {
                         />
                     </Grid>
                 </Grid>
+                <Button variant={'contained'} color={'primary'} className={classes.generateButton}>
+                    GENERATE PERCUSSION
+                </Button>
             </Container>
         )
     };
