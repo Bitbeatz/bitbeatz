@@ -43,6 +43,9 @@ const Home = (props) => {
     const handleJoinProject = async () => {
         const success = await joinProject(email, joinCode)
         setJoinStatus(success || 'Failed to join')
+        if (success) {
+            history.push(`/project/${joinCode}`)
+        }
     };
 
     const handleJoinCodeChange = ({target}) => {
