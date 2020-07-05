@@ -7,6 +7,7 @@ import {NavigateBefore, NavigateNext, PauseCircleFilled, PlayCircleFilled, Video
 
 import { ProjectSetup } from './index'
 import Controls from './Controls'
+import ControlsNoLocks from './ControlsNoLocks'
 import {db} from '../firebase/firebase'
 import NoteGrid from './NoteGrid'
 import Chat from './Chat'
@@ -101,7 +102,10 @@ const Project = (props) => {
                                 <Grid container spacing={3}>
                                     <Grid item xs={9}>
                                         <Paper className={classes.paper}>
-                                            <Controls projectId={projectId} locations={project.locations} controls={project.controls} />
+                                            { project.locksDisabled
+                                                ? <ControlsNoLocks projectId={projectId} controls={project.controls} />
+                                                : <Controls projectId={projectId} locations={project.locations} controls={project.controls} />
+                                            }
                                         </Paper>
                                     </Grid>
                                     <Grid item xs={3}>

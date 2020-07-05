@@ -58,12 +58,13 @@ const ProjectSetup = (props) => {
         }
         else {
             await db.collection('projects').add({
-                name: projectName,
-                genre: genre,
-                users: [props.user],
-                grid: DEFAULT_GRID,
                 controls: DEFAULT_CONTROLS,
-                locations: {[props.user]: ''}
+                genre: genre,
+                grid: DEFAULT_GRID,
+                locations: {[props.user]: ''},
+                locksDisabled: false,
+                name: projectName,
+                users: [props.user],
             }).then((docRef) => {
                 setProjectId(docRef.id);
             }).catch((e) => {
