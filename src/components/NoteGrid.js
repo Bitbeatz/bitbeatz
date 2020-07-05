@@ -58,7 +58,7 @@ class NoteGrid extends Component {
         this.handleLabelClick = this.handleLabelClick.bind(this)
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.grid && this.props.grid !== prevProps.grid) {
             this.setState({ grid: this.props.grid })
         }
