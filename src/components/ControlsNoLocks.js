@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import {connect} from 'react-redux'
 import Slider from '@material-ui/core/Slider';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Button from '@material-ui/core/Button'
 import {Build } from '@material-ui/icons';
 import Radio from '@material-ui/core/Radio';
 import {db} from '../firebase/firebase';
@@ -20,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
     avatar: {
         width: theme.spacing(3),
         height: theme.spacing(3),
+    },
+    generateButton: {
+        marginTop: 20
     }
 }));
 
@@ -237,6 +241,9 @@ const Controls = (props) => {
                         />
                     </Grid>
                 </Grid>
+                <Button variant={'contained'} color={'primary'} className={classes.generateButton}>
+                    GENERATE PERCUSSION
+                </Button>
             </Container>
         )
     };

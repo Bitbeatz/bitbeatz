@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import {connect} from 'react-redux'
 import get from 'lodash/get'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import { Container, Grid, Paper, Toolbar, IconButton, AppBar, Typography, Box } from '@material-ui/core'
-import {NavigateBefore, NavigateNext, PauseCircleFilled, PlayCircleFilled, VideocamOff} from '@material-ui/icons'
+import { Container, Grid, Paper, Switch, Toolbar, IconButton, AppBar, Typography, Box } from '@material-ui/core'
+import {Build, Cancel, NavigateBefore, NavigateNext, PauseCircleFilled, PlayCircleFilled, VideocamOff} from '@material-ui/icons'
 
 import { ProjectSetup } from './index'
 import Controls from './Controls'
@@ -61,6 +61,15 @@ const Project = (props) => {
             })
     }, [projectId])
 
+    const handleLockingUpdate = (newState) => {
+        db.collection('projects').doc(projectId).update({
+            locksDisabled: newState
+        })
+            .then(() => {
+            })
+            .catch(e => console.error(e))
+    }
+
     const render = () => {
         return (
             <div>
@@ -84,6 +93,13 @@ const Project = (props) => {
                                         <Typography variant="body2">
                                         Share Code: { projectId }
                                         </Typography>
+                                    </Grid>
+                                    <Grid>
+                                        <Switch
+                                            name={'lockingDisabled'}
+                                            onChange={(e) => handleLockingUpdate(e.target.checked)}
+                                            checked={project.locksDisabled}
+                                        />
                                     </Grid>
                                 </Grid>
                             </Toolbar>
