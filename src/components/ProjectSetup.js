@@ -12,7 +12,7 @@ import {db} from '../firebase/firebase';
 import {connect} from 'react-redux';
 import Share from './Share';
 
-import {DEFAULT_CONTROLS, DEFAULT_GRID, DEFAULT_LOCATIONS} from './constants'
+import {DEFAULT_CONTROLS, DEFAULT_GRIDS, DEFAULT_LOCATIONS} from './constants'
 import withStyles from "@material-ui/core/styles/withStyles";
 
 const styles = () => ({
@@ -57,11 +57,12 @@ const ProjectSetup = (props) => {
             setErrorMsg('Please select a genre');
         }
         else {
+            // TODO change from .jazz to genre after making more consts
             await db.collection('projects').add({
                 name: projectName,
                 genre: genre,
                 users: [props.user],
-                grid: DEFAULT_GRID,
+                grid: DEFAULT_GRIDS.jazz,
                 controls: DEFAULT_CONTROLS,
                 locations: {[props.user]: ''}
             }).then((docRef) => {
