@@ -33,7 +33,7 @@ const Chat = (props) => {
             chatMessages: firebase.firestore.FieldValue.arrayUnion({
                 text: currentMessage,
                 user,
-                time: Date(Date.now()),
+                time: Date.now(),
             }),
         })
             .then(() => {
@@ -77,7 +77,7 @@ const Chat = (props) => {
                         onKeyPress={handleKeyPress}
                     />
                 </Grid>
-                <Grid item xs={3} align="right" alignItems="center">
+                <Grid item xs={3} align="right">
                     <Fab color="primary" aria-label="send" onClick={handleSendMessage}>
                         <SendIcon className={classes.send} />
                     </Fab>

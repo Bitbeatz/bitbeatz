@@ -1,16 +1,9 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { updateGrid } from '../actions/notegrid'
 import { withStyles } from '@material-ui/styles'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import { sizing } from '@material-ui/system';
-import Typography from '@material-ui/core/Typography';
-import { positions } from '@material-ui/system';
 import { Grid } from '@material-ui/core';
 import { ButtonGroup } from '@material-ui/core';
-import get from 'lodash/get'
 
 import {db} from '../firebase/firebase';
 import { DEFAULT_GRIDS } from './constants'
@@ -65,8 +58,8 @@ class NoteGrid extends Component {
         if (this.props.controls && this.props.controls !== prevProps.controls) {
             const loopLength = this.props.controls.loopLength * 3;
             const newGrid = {0: [], 1: [], 2: [], 3: [], 4: []};
-            Object.keys(this.props.grid).map((row, i) => {
-                this.props.grid[row].map((col, j) => {
+            Object.keys(this.props.grid).forEach((row, i) => {
+                this.props.grid[row].forEach((col, j) => {
                     if (j < loopLength) {
                         newGrid[row].push(this.props.grid[row][j]);
                     }
@@ -123,8 +116,8 @@ class NoteGrid extends Component {
             <Box display="flex" flexDirection="row" >
                 <Grid container spacing={0} direction="column">
                     { Object.keys(this.state.drums).map((drum_sound, i) => (
-                        <Grid item key={i} spacing={0}>
-                            <Button id={this.state.drums[i]} fullWidth="true" variant="text" size="small" onClick={this.handleLabelClick}>{this.state.drums[i]}</Button>
+                        <Grid container item key={i} spacing={0}>
+                            <Button id={this.state.drums[i]} fullWidth variant="text" size="small" onClick={this.handleLabelClick}>{this.state.drums[i]}</Button>
                         </Grid>
                     ))}
                 </Grid>
@@ -135,6 +128,7 @@ class NoteGrid extends Component {
                                 { this.state.grid[row].map((active, j) => (
                                     <Button
                                     id={(i * 24) + j}
+                                    key={(i * 24) + j}
                                     className={classes.button}
                                     style={{backgroundColor: active ? 'red' : 'white'}}
                                     onClick={this.handleGridClick}>

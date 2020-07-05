@@ -4,10 +4,7 @@ import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import {connect} from 'react-redux'
 import Slider from '@material-ui/core/Slider';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button'
-import {Build } from '@material-ui/icons';
-import Radio from '@material-ui/core/Radio';
 import {db} from '../firebase/firebase';
 import {DEFAULT_CONTROLS    } from './constants';
 

@@ -62,6 +62,7 @@ const ProjectSetup = (props) => {
                 controls: DEFAULT_CONTROLS,
                 genre: genre,
                 grid: DEFAULT_GRIDS.jazz,
+                ideal: DEFAULT_GRIDS.jazz,
                 locations: {[props.user]: ''},
                 locksDisabled: false,
                 name: projectName,

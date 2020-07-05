@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import {connect} from 'react-redux'
+import clsx from 'clsx'
 import get from 'lodash/get'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { Container, Grid, Paper, Switch, Toolbar, IconButton, AppBar, Typography, Box } from '@material-ui/core'
-import {Build, Cancel, NavigateBefore, NavigateNext, PauseCircleFilled, PlayCircleFilled, VideocamOff} from '@material-ui/icons'
+import {NavigateBefore, NavigateNext, PauseCircleFilled, PlayCircleFilled, VideocamOff} from '@material-ui/icons'
 
 import { ProjectSetup } from './index'
 import Controls from './Controls'
@@ -11,6 +12,7 @@ import ControlsNoLocks from './ControlsNoLocks'
 import {db} from '../firebase/firebase'
 import NoteGrid from './NoteGrid'
 import Chat from './Chat'
+import {DEFAULT_CONTROLS, DEFAULT_GRIDS } from './constants'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -50,15 +52,25 @@ const Project = (props) => {
     const projectId = get(params, 'projectId')
     const isNewProject = projectId === 'new'
     const [playing, setPlaying] = useState(false)
-    const [project, setProject] = useState({})
+    const [project, setProject] = useState({
+        controls: DEFAULT_CONTROLS,
+        genre: 'jazz',
+        grid: DEFAULT_GRIDS.jazz,
+        ideal: DEFAULT_GRIDS.jazz,
+        locations: {[props.user]: ''},
+        locksDisabled: false,
+        name: '',
+        users: [props.user],
+    })
 
     useEffect(() => {
-        db.collection('projects').doc(projectId)
+        const unsubscribe = db.collection('projects').doc(projectId)
             .onSnapshot((doc) => {
                 if (doc.exists) {
                     setProject(doc.data())
                 }
             })
+        return unsubscribe
     }, [projectId])
 
     const handleLockingUpdate = (newState) => {
@@ -127,7 +139,7 @@ const Project = (props) => {
                                     <Grid item xs={3}>
                                         <Grid container spacing={0}>
                                             <Grid item xs={12}>
-                                                <Paper className={[classes.paper, classes.cam]}>
+                                                <Paper className={clsx(classes.paper, classes.cam)}>
                                                     <IconButton>
                                                         <NavigateBefore color={'primary'} />
                                                     </IconButton>
