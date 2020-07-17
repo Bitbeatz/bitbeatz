@@ -91,11 +91,6 @@ const Project = (props) => {
                         <AppBar position="static">
                             <Toolbar>
                                 <Grid container spacing={1}>
-                                    <Grid item xs={1}>
-                                        <IconButton edge="start" color="inherit" aria-label="menu" onClick={() => setPlaying(!playing)}>
-                                            { !playing ? <PlayCircleFilled /> : <PauseCircleFilled /> }
-                                        </IconButton>
-                                    </Grid>
                                     <Grid item xs>
                                         <Typography variant="h4">
                                             { project.name }
@@ -121,7 +116,10 @@ const Project = (props) => {
                                 <Grid container spacing={3} justify="flex-start" alignItems="flex-start">
                                     <Grid item xs={12}>
                                         <Paper className={classes.gridPaper}>
-                                            <Box justifyContent="flex-start" alignItems="flex-start" className={classes.overflow}>
+                                            <Box display="flex" justifyContent="center" alignItems="center" className={classes.overflow}>
+                                                <IconButton color="primary" aria-label="menu" onClick={() => setPlaying(!playing)}>
+                                                    { !playing ? <PlayCircleFilled /> : <PauseCircleFilled /> }
+                                                </IconButton>
                                                 <NoteGrid projectId={projectId} grid={project.grid} controls={project.controls}/>
                                             </Box>
                                         </Paper>
