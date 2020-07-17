@@ -106,13 +106,6 @@ const Project = (props) => {
                                         Share Code: { projectId }
                                         </Typography>
                                     </Grid>
-                                    <Grid>
-                                        <Switch
-                                            name={'lockingDisabled'}
-                                            onChange={(e) => handleLockingUpdate(e.target.checked)}
-                                            checked={project.locksDisabled}
-                                        />
-                                    </Grid>
                                 </Grid>
                             </Toolbar>
                         </AppBar>
