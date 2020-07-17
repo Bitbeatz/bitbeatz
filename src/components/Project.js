@@ -5,7 +5,7 @@ import get from 'lodash/get'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { Container, Grid, Paper, Switch, Toolbar, IconButton, AppBar, Typography, Box } from '@material-ui/core'
 import {NavigateBefore, NavigateNext, PauseCircleFilled, PlayCircleFilled, VideocamOff, FileCopy} from '@material-ui/icons'
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import {CopyToClipboard} from 'react-copy-to-clipboard'
 
 import { ProjectSetup } from './index'
 import Controls from './Controls'
