@@ -5,12 +5,13 @@ import Grid from '@material-ui/core/Grid'
 import {connect} from 'react-redux'
 import Slider from '@material-ui/core/Slider';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import {Build, Cancel } from '@material-ui/icons';
+import {LockOpen, Lock } from '@material-ui/icons';
 import Radio from '@material-ui/core/Radio';
 import {db} from '../firebase/firebase';
 import {DEFAULT_CONTROLS, DEFAULT_LOCATIONS, lengthMarks, varMarks, marks} from './constants';
 import {Avatar} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -130,8 +131,8 @@ const Controls = (props) => {
                             <FormControlLabel
                                 control={
                                     <Radio
-                                        icon={<Build />}
-                                        checkedIcon={<Cancel />}
+                                        icon={<Lock />}
+                                        checkedIcon={<LockOpen />}
                                         value={'tempo'}
                                         onClick={() => handleLocationsChange('tempo')}
                                         checked={locations[props.username] === 'tempo'}
@@ -145,16 +146,33 @@ const Controls = (props) => {
                         Tempo (bpm)
                     </Grid>
                     <Grid item xs>
-                        <Slider
-                            value={tempo}
-                            valueLabelDisplay="auto"
-                            marks={marks}
-                            max={200}
-                            min={40}
-                            disabled={locations[props.username] !== 'tempo'}
-                            onChange={handleTempoChange}
-                            onMouseUp={updateFireStoreControls}
-                        />
+                        {locations[props.username] !== 'tempo' ?
+                            <Tooltip
+                                title={'Tempo is Locked'}
+                                arrow
+                                placement={'left-start'}>
+                                <div>
+                                    <Slider
+                                        value={tempo}
+                                        valueLabelDisplay="auto"
+                                        marks={marks}
+                                        max={200}
+                                        min={40}
+                                        disabled={true}
+                                    />
+                                </div>
+                            </Tooltip> :
+                            <Slider
+                                value={tempo}
+                                valueLabelDisplay="auto"
+                                marks={marks}
+                                max={200}
+                                min={40}
+                                disabled={false}
+                                onChange={handleTempoChange}
+                                onChangeCommitted={updateFireStoreControls}
+                            />
+                        }
                     </Grid>
                 </Grid>
                 <Grid container spacing={3}>
@@ -163,8 +181,8 @@ const Controls = (props) => {
                             <FormControlLabel
                                 control={
                                     <Radio
-                                        icon={<Build />}
-                                        checkedIcon={<Cancel />}
+                                        icon={<Lock />}
+                                        checkedIcon={<LockOpen />}
                                         value={'variation'}
                                         onClick={() => handleLocationsChange('variation')}
                                         checked={locations[props.username] === 'variation'}
@@ -178,14 +196,29 @@ const Controls = (props) => {
                         Random Variation
                     </Grid>
                     <Grid item xs>
-                        <Slider
-                            value={variation}
-                            valueLabelDisplay="auto"
-                            marks={varMarks}
-                            disabled={locations[props.username] !== 'variation'}
-                            onChange={handleVariationChange}
-                            onMouseUp={updateFireStoreControls}
-                        />
+                        {locations[props.username] !== 'variation' ?
+                            <Tooltip
+                                title={'Random Variation is Locked'}
+                                arrow
+                                placement={'left-start'}>
+                                <div>
+                                    <Slider
+                                        value={variation}
+                                        valueLabelDisplay="auto"
+                                        marks={varMarks}
+                                        disabled={true}
+                                    />
+                                </div>
+                            </Tooltip> :
+                            <Slider
+                                value={variation}
+                                valueLabelDisplay="auto"
+                                marks={varMarks}
+                                disabled={false}
+                                onChange={handleVariationChange}
+                                onChangeCommitted={updateFireStoreControls}
+                            />
+                        }
                     </Grid>
                 </Grid>
                 <Grid container spacing={3}>
@@ -194,8 +227,8 @@ const Controls = (props) => {
                             <FormControlLabel
                                 control={
                                     <Radio
-                                        icon={<Build/>}
-                                        checkedIcon={<Cancel/>}
+                                        icon={<Lock />}
+                                        checkedIcon={<LockOpen />}
                                         value={'loopLength'}
                                         onClick={() => handleLocationsChange('loopLength')}
                                         checked={locations[props.username] === 'loopLength'}
@@ -209,16 +242,35 @@ const Controls = (props) => {
                         Loop Length (beats)
                     </Grid>
                     <Grid item xs>
-                        <Slider
-                            value={loopLength}
-                            valueLabelDisplay="auto"
-                            marks={lengthMarks}
-                            step={null}
-                            max={8}
-                            min={2}
-                            disabled={locations[props.username] !== 'loopLength'}
-                            onChange={handleLengthChange}
-                        />
+                        {locations[props.username] !== 'loopLength' ?
+                            <Tooltip
+                                title={'Loop Length is Locked'}
+                                arrow
+                                placement={'left-start'}>
+                                <div>
+                                    <Slider
+                                        value={loopLength}
+                                        valueLabelDisplay="auto"
+                                        marks={lengthMarks}
+                                        step={null}
+                                        max={8}
+                                        min={2}
+                                        disabled={true}
+                                    />
+                                </div>
+                            </Tooltip> :
+                            <Slider
+                                value={loopLength}
+                                valueLabelDisplay="auto"
+                                marks={lengthMarks}
+                                step={null}
+                                max={8}
+                                min={2}
+                                disabled={false}
+                                onChange={handleLengthChange}
+                                onChangeCommitted={updateFireStoreControls}
+                            />
+                        }
                     </Grid>
                 </Grid>
                 <Button variant={'contained'} color={'primary'} className={classes.generateButton}>
@@ -234,20 +286,11 @@ const Controls = (props) => {
 function mapStateToProps(state) {
     const user = state.auth.user.email;
     let username = '';
-    if (user.includes('.com')) {
-        username = state.auth.user.email.split('.com')[0];
-    }
-    else if (user.includes('.ca')) {
-        username = state.auth.user.email.split('.ca')[0];
-    }
-    else if (user.includes('.org')) {
-        username = state.auth.user.email.split('.org')[0];
-    }
-    else if (user.includes('.net')) {
-        username = state.auth.user.email.split('.net')[0];
-    }
-    else {
-        username = state.auth.user.email.split('.')[0];
+    if (user.includes('.')) {
+        const splitName = state.auth.user.email.split('.');
+        for (let i = 0; i < splitName.length - 1; i++) {
+            username = username + splitName[i];
+        }
     }
     return {
         user: user,

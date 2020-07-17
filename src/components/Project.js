@@ -111,13 +111,6 @@ const Project = (props) => {
                                             </Typography>
                                         </Grid>
                                     </Grid>
-                                    <Grid>
-                                        <Switch
-                                            name={'lockingDisabled'}
-                                            onChange={(e) => handleLockingUpdate(e.target.checked)}
-                                            checked={project.locksDisabled}
-                                        />
-                                    </Grid>
                                 </Grid>
                             </Toolbar>
                         </AppBar>
