@@ -3,13 +3,13 @@ import {connect} from 'react-redux'
 import clsx from 'clsx'
 import get from 'lodash/get'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import { Container, Grid, Paper, Switch, Toolbar, IconButton, AppBar, Typography, Box } from '@material-ui/core'
-import {NavigateBefore, NavigateNext, PauseCircleFilled, PlayCircleFilled, VideocamOff, FileCopy} from '@material-ui/icons'
+
+import { Container, Grid, Paper, Toolbar, IconButton, AppBar, Typography, Box } from '@material-ui/core'
+import {Face, PauseCircleFilled, PlayCircleFilled, VideocamOff, FileCopy} from '@material-ui/icons'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 
 import { ProjectSetup } from './index'
 import Controls from './Controls'
-import ControlsNoLocks from './ControlsNoLocks'
 import {db} from '../firebase/firebase'
 import NoteGrid from './NoteGrid'
 import Chat from './Chat'
@@ -59,7 +59,6 @@ const Project = (props) => {
         grid: DEFAULT_GRIDS.jazz,
         ideal: DEFAULT_GRIDS.jazz,
         locations: {[props.user]: ''},
-        locksDisabled: false,
         name: '',
         users: [props.user],
     })
@@ -73,15 +72,6 @@ const Project = (props) => {
             })
         return unsubscribe
     }, [projectId])
-
-    const handleLockingUpdate = (newState) => {
-        db.collection('projects').doc(projectId).update({
-            locksDisabled: newState
-        })
-            .then(() => {
-            })
-            .catch(e => console.error(e))
-    }
 
     const render = () => {
         return (
@@ -97,7 +87,7 @@ const Project = (props) => {
                                             { project.name }
                                         </Typography>
                                     </Grid>
-                                    <Grid container alignItems="center" xs={3}>
+                                    <Grid container alignItems="center" xs={4}>
                                         <Grid item>
                                             <CopyToClipboard text={projectId}>
                                                 <IconButton color="inherit" aria-label="menu">
@@ -105,7 +95,7 @@ const Project = (props) => {
                                                 </IconButton>
                                             </CopyToClipboard>
                                         </Grid>
-                                        <Grid item >
+                                        <Grid item>
                                             <Typography variant="body2">
                                                 Share Code: { projectId }
                                             </Typography>
@@ -131,28 +121,34 @@ const Project = (props) => {
                                 <Grid container spacing={3}>
                                     <Grid item xs={9}>
                                         <Paper className={classes.paper}>
-                                            { project.locksDisabled
-                                                ? <ControlsNoLocks projectId={projectId} controls={project.controls} />
-                                                : <Controls projectId={projectId} locations={project.locations} controls={project.controls} />
-                                            }
+                                            <Controls projectId={projectId} locations={project.locations} controls={project.controls} />
                                         </Paper>
                                     </Grid>
                                     <Grid item xs={3}>
-                                        <Grid container spacing={0}>
-                                            <Grid item xs={12}>
-                                                <Paper className={clsx(classes.paper, classes.cam)}>
-                                                    <IconButton>
-                                                        <NavigateBefore color={'primary'} />
-                                                    </IconButton>
-                                                    <VideocamOff color={'secondary'} />
-                                                    <IconButton>
-                                                        <NavigateNext color={'primary'} />
-                                                    </IconButton>
-                                                </Paper>
-                                            </Grid>
+                                        <Grid container spacing={1}>
                                             <Grid item xs={12}>
                                                 <Paper className={classes.section}>
                                                     <Chat projectId={projectId} messages={project.chatMessages}/>
+                                                </Paper>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <Paper className={clsx(classes.paper, classes.cam)}>
+                                                    <Face color={'primary'} />
+                                                </Paper>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <Paper className={clsx(classes.paper, classes.cam)}>
+                                                    <Face color={'primary'} />
+                                                </Paper>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <Paper className={clsx(classes.paper, classes.cam)}>
+                                                    <Face color={'primary'} />
+                                                </Paper>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <Paper className={clsx(classes.paper, classes.cam)}>
+                                                    <VideocamOff color={'secondary'} />
                                                 </Paper>
                                             </Grid>
                                         </Grid>
