@@ -3,8 +3,9 @@ import {connect} from 'react-redux'
 import clsx from 'clsx'
 import get from 'lodash/get'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import { Container, Grid, Paper, Switch, Toolbar, IconButton, AppBar, Typography, Box } from '@material-ui/core'
-import {Face, PauseCircleFilled, PlayCircleFilled, VideocamOff} from '@material-ui/icons'
+import { Container, Grid, Paper, Toolbar, IconButton, AppBar, Typography, Box } from '@material-ui/core'
+import {Face, PauseCircleFilled, PlayCircleFilled, VideocamOff, FileCopy} from '@material-ui/icons'
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 import { ProjectSetup } from './index'
 import Controls from './Controls'
@@ -86,10 +87,19 @@ const Project = (props) => {
                                             { project.name }
                                         </Typography>
                                     </Grid>
-                                    <Grid item xs={2}>
-                                        <Typography variant="body2">
-                                        Share Code: { projectId }
-                                        </Typography>
+                                    <Grid container alignItems="center" xs={3}>
+                                        <Grid item>
+                                            <CopyToClipboard text={projectId}>
+                                                <IconButton color="inherit" aria-label="menu">
+                                                    <FileCopy />
+                                                </IconButton>
+                                            </CopyToClipboard>
+                                        </Grid>
+                                        <Grid item >
+                                            <Typography variant="body2">
+                                                Share Code: { projectId }
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
                                 </Grid>
                             </Toolbar>
