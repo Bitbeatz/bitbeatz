@@ -64,6 +64,7 @@ const Project = (props) => {
     })
 
     useEffect(() => {
+        if (isNewProject) return
         const unsubscribe = db.collection('projects').doc(projectId)
             .onSnapshot((doc) => {
                 if (doc.exists) {
