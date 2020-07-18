@@ -1,4 +1,7 @@
+export {default as CreateAccount} from './CreateAccount'
 export {default as Home} from './Home'
+export {default as Intro} from './Intro'
+export {default as IntroPage} from './IntroPage'
 export {default as Login} from './Login'
 export {default as NavBar} from './NavBar'
 export {default as Project} from './Project'

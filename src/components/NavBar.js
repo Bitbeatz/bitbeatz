@@ -84,6 +84,7 @@ function NavBar(props) {
     const [projects, setProjects] = useState([])
 
     useEffect(() => {
+        if (!props.user) return
         async function fetchData() {
             const res = await getMyProjects(props.user)
             setProjects(res)

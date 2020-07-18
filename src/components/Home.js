@@ -5,8 +5,8 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 
+import { Intro } from './index'
 import history from '../history'
 import { joinProject } from '../helpers/joinProject'
 
@@ -19,7 +19,11 @@ const styles = () => ({
     paper: {
         display: 'flex',
         padding: 100,
-        flexDirection: 'column'
+        flexDirection: 'column',
+        height: '100vh'
+    },
+    intro: {
+        marginBottom: 50,
     },
     form: {
         marginTop: 1,
@@ -33,6 +37,14 @@ const styles = () => ({
     center: {
         alignSelf: 'center',
     },
+    join: {
+        display: 'flex',
+        marginTop: 20,
+    },
+    joinButton: {
+        marginLeft: 10,
+        minWidth: 100,
+    }
 });
 
 const Home = (props) => {
@@ -54,32 +66,28 @@ const Home = (props) => {
 
     const render = () => {
         return (
-            <Container>
+            <Container disableGutters>
                 <Paper className={classes.paper}>
                     { isLoggingOut && <p>Logging Out....</p> }
                     { logoutError && <p>Error logging out</p> }
-                    <Typography variant="h2" className={classes.center}>
-                        BitBeatz
-                    </Typography>
-                    <Typography variant="h4">
-                        Projects
-                    </Typography>
+                    <div className={classes.intro}>
+                        <Intro/>
+                    </div>
                     <Button variant="contained" color={'primary'} onClick={() => history.push('/project/new')}>Create New Project</Button>
-                    <div>
+                    <div className={classes.join}>
                         <TextField
                             variant="outlined"
-                            margin="normal"
                             fullWidth
                             id="join"
                             label="Join Project With Invite Code"
                             name="join"
                             onChange={handleJoinCodeChange}
                         />
-                        <Button variant="contained" color={'primary'} onClick={handleJoinProject}>
+                        <Button size="large" variant="contained" className={classes.joinButton} color={'primary'} onClick={handleJoinProject}>
                             Join
                         </Button>
-                        <span>{ joinStatus }</span>
                     </div>
+                    <p>{ joinStatus }</p>
                 </Paper>
             </Container>
         )
