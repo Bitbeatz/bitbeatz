@@ -9,7 +9,6 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 import { ProjectSetup } from './index'
 import Controls from './Controls'
-import ControlsNoLocks from './ControlsNoLocks'
 import {db} from '../firebase/firebase'
 import NoteGrid from './NoteGrid'
 import Chat from './Chat'
@@ -113,7 +112,7 @@ const Project = (props) => {
                                                 <IconButton color="primary" aria-label="menu" onClick={() => setPlaying(!playing)}>
                                                     { !playing ? <PlayCircleFilled /> : <PauseCircleFilled /> }
                                                 </IconButton>
-                                                <NoteGrid projectId={projectId} grid={project.grid} controls={project.controls}/>
+                                                <NoteGrid projectId={projectId} grid={project.grid} controls={project.controls} locations={project.locations}/>
                                             </Box>
                                         </Paper>
                                     </Grid>

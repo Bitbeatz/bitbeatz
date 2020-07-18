@@ -8,6 +8,10 @@ import { ButtonGroup } from '@material-ui/core';
 
 import {db} from '../firebase/firebase';
 import { DEFAULT_GRIDS } from './constants'
+import {Lock, LockOpen} from "@material-ui/icons";
+import Radio from "@material-ui/core/Radio";
+import {connect} from "react-redux";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const styles = () => ({
     '@global': {
@@ -46,7 +50,8 @@ class NoteGrid extends Component {
                 2: "Hi-Hat", // Hi-Hat
                 3: "Snare", // Snare Drum
                 4: "Low Tom", // Low Tom
-            }
+            },
+            locations: {[props.username]: ''}
         }
 
         this.handleGridClick = this.handleGridClick.bind(this)
@@ -56,6 +61,9 @@ class NoteGrid extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.grid && this.props.grid !== prevProps.grid) {
             this.setState({ grid: this.props.grid })
+        }
+        if (this.props.locations && this.props.locations !== prevProps.locations) {
+            this.setState({ locations: this.props.locations })
         }
         const newLoopLength = get(this.props, 'controls.loopLength')
         if (newLoopLength && newLoopLength !== prevState.loopLength) {
@@ -104,31 +112,82 @@ class NoteGrid extends Component {
             .catch(e => console.error(e))
     }
 
+    handleLocationsChange = (loc) => {
+        if (this.state.locations[this.props.username] === loc) {
+            this.setState({locations: {[this.props.username]: ''}});
+            this.updateFireStoreLocations('');
+        } else {
+            this.setState({locations: {[this.props.username]: loc}});
+            this.updateFireStoreLocations(loc);
+        }
+    };
+
+    updateFireStoreLocations = (loc) => {
+        const updateData = {[`locations.${this.props.username}`]: loc};
+
+        db.collection('projects').doc(this.props.projectId).update(updateData)
+            .then(() => {
+                console.log('updated locations successfully')
+            })
+            .catch(e => console.error(e))
+    };
+
     render = () => {
         const { classes } = this.props
         return (
             <Box display="flex" flexDirection="row" >
                 <Grid container spacing={0} direction="column" xs={2}>
                     { Object.keys(this.state.drums).map((drum_sound, i) => (
-                        <Grid container item key={i} spacing={0}>
-                            <Button id={this.state.drums[i]} fullWidth variant="text" size="small" onClick={this.handleLabelClick}>{this.state.drums[i]}</Button>
+                        <Grid container>
+                            <Grid item>
+                                <Radio
+                                    icon={<Lock />}
+                                    checkedIcon={<LockOpen />}
+                                    value={this.state.drums[i]}
+                                    onClick={() => this.handleLocationsChange(this.state.drums[i])}
+                                    checked={this.state.locations[this.props.username] === this.state.drums[i]}
+                                />
+                            </Grid>
+                            <Grid item key={i} spacing={0}>
+                                <Button id={this.state.drums[i]} fullWidth variant="text" size="small" onClick={this.handleLabelClick}>{this.state.drums[i]}</Button>
+                            </Grid>
                         </Grid>
                     ))}
                 </Grid>
                 <Grid container spacing={0}>
                     { Object.keys(this.state.grid).map((row, i) => (
                         <Grid container key={i} spacing={0}>
-                            <ButtonGroup className={classes.buttonGroup} size="medium">
-                                { this.state.grid[row].map((active, j) => (
-                                    j < this.state.loopLength * 3 && <Button
-                                    id={(i * 24) + j}
-                                    key={(i * 24) + j}
-                                    className={classes.button}
-                                    style={{backgroundColor: active ? 'red' : 'white'}}
-                                    onClick={this.handleGridClick}>
-                                    </Button>
-                                ))}
-                            </ButtonGroup>
+                            { this.state.locations[this.props.username] !== this.state.drums[i] ?
+                                <Tooltip
+                                    title={this.state.drums[i] + ' is Locked'}
+                                    arrow
+                                    placement={'left-start'}>
+                                    <div>
+                                        <ButtonGroup disabled={true} className={classes.buttonGroup} size="medium">
+                                            {this.state.grid[row].map((active, j) => (
+                                                j < this.state.loopLength * 3 && <Button
+                                                    id={(i * 24) + j}
+                                                    key={(i * 24) + j}
+                                                    className={classes.button}
+                                                    style={{backgroundColor: active ? 'red' : 'white'}}
+                                                    onClick={this.handleGridClick}>
+                                                </Button>
+                                            ))}
+                                        </ButtonGroup>
+                                    </div>
+                                </Tooltip> :
+                                <ButtonGroup className={classes.buttonGroup} size="medium">
+                                    {this.state.grid[row].map((active, j) => (
+                                        j < this.state.loopLength * 3 && <Button
+                                            id={(i * 24) + j}
+                                            key={(i * 24) + j}
+                                            className={classes.button}
+                                            style={{backgroundColor: active ? 'red' : 'white'}}
+                                            onClick={this.handleGridClick}>
+                                        </Button>
+                                    ))}
+                                </ButtonGroup>
+                            }
                         </Grid>
                     ))}
                 </Grid>
@@ -138,4 +197,19 @@ class NoteGrid extends Component {
 
 }
 
-export default withStyles(styles)(NoteGrid)
+function mapStateToProps(state) {
+    const user = state.auth.user.email;
+    let username = '';
+    if (user.includes('.')) {
+        const splitName = state.auth.user.email.split('.');
+        for (let i = 0; i < splitName.length - 1; i++) {
+            username = username + splitName[i];
+        }
+    }
+    return {
+        user: user,
+        username: username
+    }
+}
+
+export default withStyles(styles)(connect(mapStateToProps)(NoteGrid))
