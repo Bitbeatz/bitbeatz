@@ -3,9 +3,10 @@ import {connect} from 'react-redux'
 import clsx from 'clsx'
 import get from 'lodash/get'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+
 import { Container, Grid, Paper, Toolbar, IconButton, AppBar, Typography, Box } from '@material-ui/core'
 import {Face, PauseCircleFilled, PlayCircleFilled, VideocamOff, FileCopy} from '@material-ui/icons'
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import {CopyToClipboard} from 'react-copy-to-clipboard'
 
 import { ProjectSetup } from './index'
 import Controls from './Controls'
@@ -63,6 +64,7 @@ const Project = (props) => {
     })
 
     useEffect(() => {
+        if (isNewProject) return
         const unsubscribe = db.collection('projects').doc(projectId)
             .onSnapshot((doc) => {
                 if (doc.exists) {
@@ -86,7 +88,7 @@ const Project = (props) => {
                                             { project.name }
                                         </Typography>
                                     </Grid>
-                                    <Grid container alignItems="center" xs={3}>
+                                    <Grid container alignItems="center" xs={4}>
                                         <Grid item>
                                             <CopyToClipboard text={projectId}>
                                                 <IconButton color="inherit" aria-label="menu">
@@ -94,7 +96,7 @@ const Project = (props) => {
                                                 </IconButton>
                                             </CopyToClipboard>
                                         </Grid>
-                                        <Grid item >
+                                        <Grid item>
                                             <Typography variant="body2">
                                                 Share Code: { projectId }
                                             </Typography>

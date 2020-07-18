@@ -45,7 +45,7 @@ export default (
             ...state,
             isLoggingIn: false,
             isAuthenticated: false,
-            loginError: true,
+            loginError: action.error,
         }
     case LOGOUT_REQUEST:
         return {

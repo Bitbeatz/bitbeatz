@@ -1,7 +1,7 @@
 import React from 'react'
 import { Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { ProtectedRoute, Home, Login, Project } from './components'
+import { ProtectedRoute, Home, IntroPage, Login, Project, CreateAccount } from './components'
 import history from './history'
 
 function App(props) {
@@ -9,14 +9,18 @@ function App(props) {
     return (
         <Router history={history}>
             <Switch>
-                <ProtectedRoute
-                    exact
-                    path="/"
-                    component={Home}
-                    isAuthenticated={isAuthenticated}
-                    isVerifying={isVerifying}
-                />
+                { isAuthenticated
+                    ? <ProtectedRoute
+                        exact
+                        path="/"
+                        component={Home}
+                        isAuthenticated={isAuthenticated}
+                        isVerifying={isVerifying}
+                    />
+                    : <Route exact path="/" component={IntroPage} />
+                }
                 <Route path="/login" component={Login} />
+                <Route path="/createAccount" component={CreateAccount} />
                 <ProtectedRoute
                     path="/project/:projectId"
                     component={Project}

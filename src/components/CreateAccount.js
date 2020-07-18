@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
-import { loginUser } from '../actions'
+import { createUser } from '../actions'
 import { withStyles } from '@material-ui/styles'
 
 import { Avatar, Button, Container, Paper, TextField, Typography} from '@material-ui/core'
@@ -26,35 +26,43 @@ const styles = () => ({
         marginRight: 'auto',
         backgroundColor: '#f50057',
     },
-    form: {
-        marginTop: 1,
-    },
     errorText: {
         color: '#f50057',
         marginBottom: 5,
         textAlign: 'center',
     },
     submit: {
-        margin: '10px 0 10px 0'
+        margin: '10px 0 10px 0',
     }
 })
 
-const Login = (props) => {
+const CreateAccount = (props) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [passwordError, setPasswordError] = useState('')
 
     const handleEmailChange = ({ target }) => {
         setEmail(target.value)
     }
 
+    const handleConfirmPasswordChange = ({ target }) => {
+        setConfirmPassword(target.value)
+        setPasswordError('')
+    }
     const handlePasswordChange = ({ target }) => {
         setPassword(target.value)
+        setPasswordError('')
     }
 
-    const handleSubmit = () => {
+    const handleCreateUser = () => {
         const { dispatch } = props
+        if (password !== confirmPassword) {
+            setPasswordError('Passwords must match')
+            return
+        }
 
-        dispatch(loginUser(email, password))
+        dispatch(createUser(email, password))
     }
 
     const render = () => {
@@ -69,7 +77,7 @@ const Login = (props) => {
                             <LockOutlinedIcon />
                         </Avatar>
                         <Typography component="h1" variant="h5">
-                            Sign in
+                            Create Account
                         </Typography>
                         <TextField
                             variant="outlined"
@@ -82,7 +90,7 @@ const Login = (props) => {
                         />
                         <TextField
                             variant="outlined"
-                            margin="none"
+                            margin="normal"
                             fullWidth
                             name="password"
                             label="Password"
@@ -90,9 +98,24 @@ const Login = (props) => {
                             id="password"
                             onChange={handlePasswordChange}
                         />
+                        <TextField
+                            variant="outlined"
+                            margin="none"
+                            fullWidth
+                            name="confirm password"
+                            label="Confirm Password"
+                            type="password"
+                            id="confirmpassword"
+                            onChange={handleConfirmPasswordChange}
+                        />
+                        { passwordError && (
+                            <Typography component="p" className={classes.errorText}>
+                                { passwordError }
+                            </Typography>
+                        ) }
                         { loginError && (
                             <Typography component="p" className={classes.errorText}>
-                                Incorrect email or password.
+                                { loginError }
                             </Typography>
                         ) }
                         <Button
@@ -101,11 +124,11 @@ const Login = (props) => {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
-                            onClick={handleSubmit}
+                            onClick={handleCreateUser}
                         >
-                            Sign In
+                            Create Account
                         </Button>
-                        <Typography variant="body2">Need an account? <Link to='/createAccount'>Create Account</Link></Typography>
+                        <Typography variant="body2">Already have an account? <Link to='/login'>Login</Link></Typography>
                     </Paper>
                 </Container>
             )
@@ -117,9 +140,8 @@ const Login = (props) => {
 
 function mapStateToProps(state) {
     return {
-        isLoggingIn: state.auth.isLoggingIn,
         loginError: state.auth.loginError,
         isAuthenticated: state.auth.isAuthenticated,
     }
 }
-export default withStyles(styles)(connect(mapStateToProps)(Login))
+export default withStyles(styles)(connect(mapStateToProps)(CreateAccount))

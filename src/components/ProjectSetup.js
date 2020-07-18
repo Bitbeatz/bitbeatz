@@ -107,19 +107,19 @@ const ProjectSetup = (props) => {
                             </Fab>
                         </Tooltip>
                         <ButtonGroup>
-                            <Button variant="contained" color={genre === 'jazz' ? 'primary' : ''}
+                            <Button variant="contained" color={genre === 'jazz' ? 'primary' : 'default'}
                                 onClick={() => setGenre('jazz')}>
                                 Jazz
                             </Button>
-                            <Button variant="contained" color={genre === 'rock' ? 'primary' : ''}
+                            <Button variant="contained" color={genre === 'rock' ? 'primary' : 'default'}
                                 onClick={() => setGenre('rock')}>
                                 Rock
                             </Button>
-                            <Button variant="contained" color={genre === 'clas' ? 'primary' : ''}
+                            <Button variant="contained" color={genre === 'clas' ? 'primary' : 'default'}
                                 onClick={() => setGenre('clas')}>
                                 Classical
                             </Button>
-                            <Button variant="contained" color={genre === 'edm' ? 'primary' : ''}
+                            <Button variant="contained" color={genre === 'edm' ? 'primary' : 'default'}
                                 onClick={() => setGenre('edm')}>
                                 EDM
                             </Button>
@@ -127,7 +127,7 @@ const ProjectSetup = (props) => {
                         <Typography variant="body2">
                             or
                         </Typography>
-                        <Button variant="contained" color={genre === 'blank' ? 'primary' : ''}
+                        <Button variant="contained" color={genre === 'blank' ? 'primary' : 'default'}
                             onClick={() => setGenre('blank')}>
                             Start From Scratch
                         </Button>

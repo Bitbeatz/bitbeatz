@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
+import { NavLink } from 'react-router-dom'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 
-import Button from '@material-ui/core/Button'
+import { Button, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemText, Tooltip } from '@material-ui/core'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import Divider from '@material-ui/core/Divider'
-import Drawer from '@material-ui/core/Drawer'
-import IconButton from '@material-ui/core/IconButton'
 import HomeIcon from '@material-ui/icons/Home';
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
+import AddIcon from '@material-ui/icons/Add'
+import LogoutIcon from '@material-ui/icons/ExitToApp'
 
 import { logoutUser } from '../actions'
 import history from '../history'
@@ -26,15 +22,19 @@ const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
     },
+    active: {
+        color: '#3f51b5 !important',
+    },
+    link: {
+        textDecoration: 'none',
+        color: 'black',
+        '&:hover': {
+            color: '#3f51b5',
+        }
+    },
     bottom: {
         position: 'absolute',
         bottom: '10px',
-        display: 'grid',
-        width: 'inherit',
-    },
-    centered: {
-        margin: '0 auto',
-        width: '50%',
     },
     drawerClosed: {
         width: drawerWidthClosed,
@@ -46,14 +46,6 @@ const useStyles = makeStyles((theme) => ({
     },
     drawerPaper: {
         width: drawerWidthOpen,
-    },
-    drawerHeader: {
-        display: 'flex',
-        alignItems: 'center',
-        padding: theme.spacing(0, 1),
-        // necessary for content to be below app bar
-        ...theme.mixins.toolbar,
-        justifyContent: 'flex-end',
     },
     content: {
         flexGrow: 1,
@@ -76,6 +68,9 @@ const useStyles = makeStyles((theme) => ({
         }),
         marginLeft: 0,
     },
+    list: {
+        height: '100%'
+    }
 }))
 
 function NavBar(props) {
@@ -84,6 +79,7 @@ function NavBar(props) {
     const [projects, setProjects] = useState([])
 
     useEffect(() => {
+        if (!props.user) return
         async function fetchData() {
             const res = await getMyProjects(props.user)
             setProjects(res)
@@ -100,6 +96,14 @@ function NavBar(props) {
         setOpen(!open)
     }
 
+    const NavItem = ({to, text}) => {
+        return <NavLink exact to={to} activeClassName={classes.active} className={classes.link}>
+            <ListItem button>
+                <ListItemText primary={text} />
+            </ListItem>
+        </NavLink>
+    }
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -112,34 +116,56 @@ function NavBar(props) {
                     paper: open ? classes.drawerPaper : classes.closedDrawer,
                 }}
             >
-                <div className={classes.drawerHeader}>
-                    <IconButton onClick={toggleDrawer}>
-                        { open ? <ChevronLeftIcon /> : <ChevronRightIcon /> }
-                    </IconButton>
-                </div>
-                <div>
-                    <IconButton onClick={() => history.push('/')}>
-                        <HomeIcon />
-                    </IconButton>
-                </div>
-                <Divider />
-                { open &&
-                    <React.Fragment>
-                        <List>
-                            { projects.map(project => (
-                                <ListItem button key={project.name} onClick={() => history.push(`/project/${project.id}`)}>
-                                    <ListItemText primary={project.name} />
+                <List className={classes.list}>
+                    { open
+                        ? <React.Fragment>
+                            <ListItem>
+                                <IconButton onClick={toggleDrawer}>
+                                    <ChevronLeftIcon />
+                                </IconButton>
+                            </ListItem>
+                            <NavItem to="/" text="Home" />
+                            <NavLink exact to="/project/new" activeClassName={classes.active} className={classes.link}>
+                                <ListItem button>
+                                    <ListItemText primary="Create New Project" />
                                 </ListItem>
+                            </NavLink>
+                            <Divider />
+                            { projects.map(project => (
+                                <NavItem key={project.id} to={`/project/${project.id}`} text={project.name}/>
                             )) }
-                        </List>
-                        <ListItem button onClick={() => history.push('/project/new')}>
-                            <ListItemText primary="Create New Project" />
-                        </ListItem>
-                    </React.Fragment>
-                }
-                <div className={classes.bottom}>
-                    <Button variant="contained" color={'secondary'} className={classes.centered} onClick={handleLogout}>Logout</Button>
-                </div>
+                            <ListItem button onClick={handleLogout} className={classes.bottom}>
+                                <ListItemText primary="Logout"/>
+                            </ListItem>
+                        </React.Fragment>
+                        : <React.Fragment>
+                            <ListItem>
+                                <IconButton onClick={toggleDrawer}>
+                                    <ChevronRightIcon />
+                                </IconButton>
+                            </ListItem>
+                            <ListItem>
+                                <Tooltip title="Home" placement="top">
+                                    <IconButton onClick={() => history.push('/')}>
+                                        <HomeIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </ListItem>
+                            <ListItem>
+                                <Tooltip title="Create New Project" placement="top">
+                                    <IconButton onClick={() => history.push('/project/new')}>
+                                        <AddIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </ListItem>
+                            <Tooltip title="Logout">
+                                <ListItem className={classes.bottom}>
+                                    <IconButton onClick={handleLogout}><LogoutIcon /></IconButton>
+                                </ListItem>
+                            </Tooltip>
+                        </React.Fragment>
+                    }
+                </List>
             </Drawer>
             <main
                 className={clsx(classes.content, open ? classes.contentShiftOpen : classes.contentShiftClosed)}
