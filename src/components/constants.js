@@ -19,10 +19,19 @@ export const DEFAULT_CONTROLS = {
     variation: 10,
     loopLength: 2
 };
-export const DEFAULT_LOCATIONS = {
-    tempo: false,
-    variation: false,
-    loopLength: false
+export const DEFAULT_LOCKS = {
+    controls: {
+        tempo: false,
+        variation: false,
+        loopLength: false
+    },
+    grid: {
+        0: false,
+        1: false,
+        2: false,
+        3: false,
+        4: false
+    }
 };
 
 export const marks = [

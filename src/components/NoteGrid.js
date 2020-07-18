@@ -3,11 +3,11 @@ import get from 'lodash/get'
 import { withStyles } from '@material-ui/styles'
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import { Grid } from '@material-ui/core';
+import {Avatar, Grid} from '@material-ui/core';
 import { ButtonGroup } from '@material-ui/core';
 
 import {db} from '../firebase/firebase';
-import { DEFAULT_GRIDS } from './constants'
+import {DEFAULT_GRIDS, DEFAULT_LOCKS} from './constants'
 import {Lock, LockOpen} from "@material-ui/icons";
 import Radio from "@material-ui/core/Radio";
 import {connect} from "react-redux";
@@ -51,7 +51,8 @@ class NoteGrid extends Component {
                 3: "Snare", // Snare Drum
                 4: "Low Tom", // Low Tom
             },
-            locations: {[props.username]: ''}
+            locations: {[props.username]: ''},
+            locked: DEFAULT_LOCKS.grid
         }
 
         this.handleGridClick = this.handleGridClick.bind(this)
@@ -63,7 +64,22 @@ class NoteGrid extends Component {
             this.setState({ grid: this.props.grid })
         }
         if (this.props.locations && this.props.locations !== prevProps.locations) {
-            this.setState({ locations: this.props.locations })
+            this.setState({ locations: this.props.locations });
+            const lockObj = {};
+            for (const user in this.props.locations) {
+                if(user !== this.props.username) {
+                    lockObj[this.props.locations[user]] = user;
+                }
+            }
+            this.setState({
+                locked: {
+                    0: lockObj[0] ? lockObj[0].toUpperCase()[0] : '',
+                    1: lockObj[1] ? lockObj[1].toUpperCase()[0] : '',
+                    2: lockObj[2] ? lockObj[2].toUpperCase()[0] : '',
+                    3: lockObj[3] ? lockObj[3].toUpperCase()[0] : '',
+                    4: lockObj[4] ? lockObj[4].toUpperCase()[0] : ''
+                }
+            })
         }
         const newLoopLength = get(this.props, 'controls.loopLength')
         if (newLoopLength && newLoopLength !== prevState.loopLength) {
@@ -140,13 +156,16 @@ class NoteGrid extends Component {
                     { Object.keys(this.state.drums).map((drum_sound, i) => (
                         <Grid container>
                             <Grid item>
-                                <Radio
-                                    icon={<Lock />}
-                                    checkedIcon={<LockOpen />}
-                                    value={this.state.drums[i]}
-                                    onClick={() => this.handleLocationsChange(this.state.drums[i])}
-                                    checked={this.state.locations[this.props.username] === this.state.drums[i]}
-                                />
+                                { !this.state.locked[i] ?
+                                    <Radio
+                                        icon={<Lock/>}
+                                        checkedIcon={<LockOpen/>}
+                                        value={i}
+                                        onClick={() => this.handleLocationsChange(i)}
+                                        checked={this.state.locations[this.props.username] === i}
+                                    /> :
+                                    <Avatar className={classes.avatar}>{ this.state.locked[i] }</Avatar>
+                                }
                             </Grid>
                             <Grid item key={i} spacing={0}>
                                 <Button id={this.state.drums[i]} fullWidth variant="text" size="small" onClick={this.handleLabelClick}>{this.state.drums[i]}</Button>
@@ -157,7 +176,7 @@ class NoteGrid extends Component {
                 <Grid container spacing={0}>
                     { Object.keys(this.state.grid).map((row, i) => (
                         <Grid container key={i} spacing={0}>
-                            { this.state.locations[this.props.username] !== this.state.drums[i] ?
+                            { this.state.locations[this.props.username] !== i ?
                                 <Tooltip
                                     title={this.state.drums[i] + ' is Locked'}
                                     arrow
@@ -176,17 +195,19 @@ class NoteGrid extends Component {
                                         </ButtonGroup>
                                     </div>
                                 </Tooltip> :
-                                <ButtonGroup className={classes.buttonGroup} size="medium">
-                                    {this.state.grid[row].map((active, j) => (
-                                        j < this.state.loopLength * 3 && <Button
-                                            id={(i * 24) + j}
-                                            key={(i * 24) + j}
-                                            className={classes.button}
-                                            style={{backgroundColor: active ? 'red' : 'white'}}
-                                            onClick={this.handleGridClick}>
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
+                                <div>
+                                    <ButtonGroup className={classes.buttonGroup} size="medium">
+                                        {this.state.grid[row].map((active, j) => (
+                                            j < this.state.loopLength * 3 && <Button
+                                                id={(i * 24) + j}
+                                                key={(i * 24) + j}
+                                                className={classes.button}
+                                                style={{backgroundColor: active ? 'red' : 'white'}}
+                                                onClick={this.handleGridClick}>
+                                            </Button>
+                                        ))}
+                                    </ButtonGroup>
+                                </div>
                             }
                         </Grid>
                     ))}

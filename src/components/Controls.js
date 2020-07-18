@@ -8,7 +8,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import {LockOpen, Lock } from '@material-ui/icons';
 import Radio from '@material-ui/core/Radio';
 import {db} from '../firebase/firebase';
-import {DEFAULT_CONTROLS, DEFAULT_LOCATIONS, lengthMarks, varMarks, marks} from './constants';
+import {DEFAULT_CONTROLS, DEFAULT_LOCKS, lengthMarks, varMarks, marks} from './constants';
 import {Avatar} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Tooltip from "@material-ui/core/Tooltip";
@@ -37,7 +37,7 @@ const Controls = (props) => {
     const [variation, setVariation] = useState(DEFAULT_CONTROLS.variation);
     const [loopLength, setLoopLength] = useState(DEFAULT_CONTROLS.loopLength);
     const [locations, setLocations] = useState({[props.username]: ''});
-    const [locked, setLocked] = useState(DEFAULT_LOCATIONS);
+    const [locked, setLocked] = useState(DEFAULT_LOCKS.controls);
 
     useEffect(() => {
         window.addEventListener('beforeunload', (ev) => {
