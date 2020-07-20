@@ -76,6 +76,9 @@ const useStyles = makeStyles((theme) => ({
     listItemPadding: {
         paddingLeft: 6,
         paddingRight: 6,
+    },
+    rotatedIcon: {
+        transform: 'rotate(180deg)'
     }
 }))
 
@@ -166,7 +169,7 @@ function NavBar(props) {
                             </ListItem>
                             <Tooltip title="Logout">
                                 <ListItem className={classes.bottom}>
-                                    <IconButton onClick={handleLogout}><LogoutIcon /></IconButton>
+                                    <IconButton onClick={handleLogout}><LogoutIcon className={classes.rotatedIcon}/></IconButton>
                                 </ListItem>
                             </Tooltip>
                         </React.Fragment>

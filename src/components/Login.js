@@ -57,6 +57,12 @@ const Login = (props) => {
         dispatch(loginUser(email, password))
     }
 
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSubmit()
+        }
+    }
+
     const render = () => {
         const { classes, loginError, isAuthenticated } = props
         if (isAuthenticated) {
@@ -79,6 +85,7 @@ const Login = (props) => {
                             label="Email Address"
                             name="email"
                             onChange={handleEmailChange}
+                            onKeyPress={handleKeyPress}
                         />
                         <TextField
                             variant="outlined"
@@ -89,6 +96,7 @@ const Login = (props) => {
                             type="password"
                             id="password"
                             onChange={handlePasswordChange}
+                            onKeyPress={handleKeyPress}
                         />
                         { loginError && (
                             <Typography component="p" className={classes.errorText}>
