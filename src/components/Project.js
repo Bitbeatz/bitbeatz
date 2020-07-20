@@ -120,12 +120,12 @@ const Project = (props) => {
                                     </Grid>
                                 </Grid>
                                 <Grid container spacing={3}>
-                                    <Grid item xs={9}>
+                                    <Grid item xs={8}>
                                         <Paper className={classes.paper}>
                                             <Controls projectId={projectId} locations={project.locations} controls={project.controls} />
                                         </Paper>
                                     </Grid>
-                                    <Grid item xs={3}>
+                                    <Grid item xs={4}>
                                         <Grid container spacing={1}>
                                             <Grid item xs={12}>
                                                 <Paper className={classes.section}>

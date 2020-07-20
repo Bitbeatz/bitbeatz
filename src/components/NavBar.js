@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { Button, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemText, Tooltip } from '@material-ui/core'
+import { CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemText, Tooltip } from '@material-ui/core'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import HomeIcon from '@material-ui/icons/Home';
@@ -35,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
     bottom: {
         position: 'absolute',
         bottom: '10px',
+        paddingLeft: 6,
+        paddingRight: 6,
     },
     drawerClosed: {
         width: drawerWidthClosed,
@@ -70,6 +72,13 @@ const useStyles = makeStyles((theme) => ({
     },
     list: {
         height: '100%'
+    },
+    listItemPadding: {
+        paddingLeft: 6,
+        paddingRight: 6,
+    },
+    rotatedIcon: {
+        transform: 'rotate(180deg)'
     }
 }))
 
@@ -119,7 +128,7 @@ function NavBar(props) {
                 <List className={classes.list}>
                     { open
                         ? <React.Fragment>
-                            <ListItem>
+                            <ListItem className={classes.listItemPadding}>
                                 <IconButton onClick={toggleDrawer}>
                                     <ChevronLeftIcon />
                                 </IconButton>
@@ -139,19 +148,19 @@ function NavBar(props) {
                             </ListItem>
                         </React.Fragment>
                         : <React.Fragment>
-                            <ListItem>
+                            <ListItem className={classes.listItemPadding}>
                                 <IconButton onClick={toggleDrawer}>
                                     <ChevronRightIcon />
                                 </IconButton>
                             </ListItem>
-                            <ListItem>
+                            <ListItem className={classes.listItemPadding}>
                                 <Tooltip title="Home" placement="top">
                                     <IconButton onClick={() => history.push('/')}>
                                         <HomeIcon />
                                     </IconButton>
                                 </Tooltip>
                             </ListItem>
-                            <ListItem>
+                            <ListItem className={classes.listItemPadding}>
                                 <Tooltip title="Create New Project" placement="top">
                                     <IconButton onClick={() => history.push('/project/new')}>
                                         <AddIcon />
@@ -160,7 +169,7 @@ function NavBar(props) {
                             </ListItem>
                             <Tooltip title="Logout">
                                 <ListItem className={classes.bottom}>
-                                    <IconButton onClick={handleLogout}><LogoutIcon /></IconButton>
+                                    <IconButton onClick={handleLogout}><LogoutIcon className={classes.rotatedIcon}/></IconButton>
                                 </ListItem>
                             </Tooltip>
                         </React.Fragment>
