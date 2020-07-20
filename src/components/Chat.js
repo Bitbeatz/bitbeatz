@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
     list: {
         margin: '10px',
-        maxHeight: '284px',
+        maxHeight: '232px',
         overflow: 'auto',
         backgroundColor: 'white',
         padding: 0

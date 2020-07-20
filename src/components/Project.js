@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(3),
     },
     paper: {
-        padding: 50,
+        padding: 30,
         textAlign: 'center',
         color: theme.palette.text.secondary,
     },
@@ -132,27 +132,29 @@ const Project = (props) => {
                                                     <Chat projectId={projectId} messages={project.chatMessages}/>
                                                 </Paper>
                                             </Grid>
-                                            <Grid item xs={6}>
-                                                <Paper className={clsx(classes.paper, classes.cam)}>
-                                                    <Face color={'primary'} />
-                                                </Paper>
-                                            </Grid>
-                                            <Grid item xs={6}>
-                                                <Paper className={clsx(classes.paper, classes.cam)}>
-                                                    <Face color={'primary'} />
-                                                </Paper>
-                                            </Grid>
-                                            <Grid item xs={6}>
-                                                <Paper className={clsx(classes.paper, classes.cam)}>
-                                                    <Face color={'primary'} />
-                                                </Paper>
-                                            </Grid>
-                                            <Grid item xs={6}>
-                                                <Paper className={clsx(classes.paper, classes.cam)}>
-                                                    <VideocamOff color={'secondary'} />
-                                                </Paper>
-                                            </Grid>
                                         </Grid>
+                                    </Grid>
+                                </Grid>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={3}>
+                                        <Paper className={clsx(classes.paper, classes.cam)}>
+                                            <Face color={'primary'} />
+                                        </Paper>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Paper className={clsx(classes.paper, classes.cam)}>
+                                            <Face color={'primary'} />
+                                        </Paper>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Paper className={clsx(classes.paper, classes.cam)}>
+                                            <Face color={'primary'} />
+                                        </Paper>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Paper className={clsx(classes.paper, classes.cam)}>
+                                            <VideocamOff color={'secondary'} />
+                                        </Paper>
                                     </Grid>
                                 </Grid>
                             </Grid>
