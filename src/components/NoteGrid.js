@@ -30,8 +30,10 @@ const styles = () => ({
         margin: 0,
         padding: 0,
         height: "auto"
+    },
+    avatar: {
+        // add size here
     }
-
 })
 
 
