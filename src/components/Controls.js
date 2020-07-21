@@ -229,6 +229,7 @@ const Controls = (props) => {
                                         value={variation}
                                         valueLabelDisplay="auto"
                                         marks={varMarks}
+                                        max={40}
                                         color={"secondary"}
                                         disabled={true}
                                     />
@@ -239,6 +240,7 @@ const Controls = (props) => {
                                 valueLabelDisplay="auto"
                                 valueLabelFormat={variation + '%'}
                                 marks={varMarks}
+                                max={40}
                                 color={"secondary"}
                                 disabled={false}
                                 onChange={handleVariationChange}

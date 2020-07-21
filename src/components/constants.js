@@ -94,16 +94,12 @@ export const varMarks = [
         label: 'some',
     },
     {
-        value: 20,
+        value: 25,
         label: 'more',
     },
     {
-        value: 50,
-        label: 'a lot',
-    },
-    {
-        value: 100,
-        label: 'all',
+        value: 40,
+        label: 'most',
     }
 ];
 
