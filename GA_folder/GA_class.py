@@ -75,6 +75,7 @@ class percussion_class:
                     pass
 
 def fitness(p_class, ideal):
+#possibly change the lower rungs, to have percentages
     fitness_score = 0
     for y in range (0,p_class.rows):
         for x in range(0,p_class.columns):
@@ -116,12 +117,16 @@ def get_scores(pop, goal):
     return scores
 
 
-def create_next_gen(pop, ideal):
+def create_next_gen(pop, ideal, purity = 23 ):
+    #add a variation variable 
     #gets the top fit of the population
     scores = get_scores(pop, ideal)
     scores = sorted(scores, key=lambda x: x[1])
     mates = scores[-int(len(scores)/2):]
-    next_gen = []
+    lucky = scores[0:purity]
+    mates = lucky+mates[purity:]
+    next_gen=[]
+
     for i in range(4):
         #shuffles parents four times to make kids
         shuffle(mates)
@@ -132,15 +137,7 @@ def create_next_gen(pop, ideal):
     
     return next_gen
 
-
-
-
-
-
-
-
-            
-
+       
 
 
 # ideal = [[1,0,0,1,0,1],[1,0,0,1,0,0],[0,0,0,1,0,0],[1,0,0,0,0,0],[1,0,0,0,0,0]]
@@ -152,7 +149,7 @@ scores = [item[1] for item in whole]
 score = sum(scores)/len(scores)
 print(score)
 
-for i in range(40):
+for i in range(100):
     generation = create_next_gen(generation, ideal)
     print("Generation:", i)
     whole = get_scores(generation,ideal)
