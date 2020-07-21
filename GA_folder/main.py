@@ -58,7 +58,7 @@ def fitness(p_class, ideal):
                 fitness_score +=1*(1/(y+1))
     return (fitness_score/30)
 
-def fornicate (p1, p2, mut = 10):
+def combine (p1, p2, mut = 10):
     new_c = [[0] * p1.columns for i in range(p1.rows)]
     for y in range (0,p2.rows):
         for x in range(0,p2.columns):
@@ -108,7 +108,7 @@ def create_next_gen(pop, ideal, purity = 23 ):
         moms = mates [-int(len(mates)/2):]
         dads = mates [0:int(len(mates)/2)]
         for i in range(0,len(moms)):
-            next_gen.append(fornicate(moms[i][2],dads[i][2]))
+            next_gen.append(combine(moms[i][2],dads[i][2]))
     
     return next_gen
 
