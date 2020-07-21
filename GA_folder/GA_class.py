@@ -75,6 +75,7 @@ class percussion_class:
                     pass
 
 def fitness(p_class, ideal):
+#possibly change the lower rungs, to have percentages
     fitness_score = 0
     for y in range (0,p_class.rows):
         for x in range(0,p_class.columns):
@@ -117,6 +118,7 @@ def get_scores(pop, goal):
 
 
 def create_next_gen(pop, ideal):
+    #add a variation variable 
     #gets the top fit of the population
     scores = get_scores(pop, ideal)
     scores = sorted(scores, key=lambda x: x[1])
@@ -132,15 +134,7 @@ def create_next_gen(pop, ideal):
     
     return next_gen
 
-
-
-
-
-
-
-
-            
-
+       
 
 
 # ideal = [[1,0,0,1,0,1],[1,0,0,1,0,0],[0,0,0,1,0,0],[1,0,0,0,0,0],[1,0,0,0,0,0]]
