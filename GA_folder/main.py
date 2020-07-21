@@ -7,38 +7,12 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 
-cred=credentials.Certificate('./adminKey.json')
-firebase_admin.initialize_app(cred)
+# cred=credentials.Certificate('./adminKey.json')
+# firebase_admin.initialize_app(cred)
+firebase_admin.initialize_app()
 
 db = firestore.client()
 
-projectId = u'test'
-ideal = []
-
-doc_ref = db.collection(u'projects').document(projectId)
-project_doc = doc_ref.get()
-if project_doc.exists:
-    data = project_doc.to_dict()
-    if 'ideal' in data:
-        idealData = data['ideal']
-        for i in idealData:
-            ideal.append(i['0'])
-        print(f'ideal: {ideal}')
-else:
-    exit()
-
-# doc_ref.update({
-#     u'ideal': [
-#         { u'0': [1,0,0,1,0,1] },
-#         { u'0': [1,0,0,1,0,0] },
-#         { u'0': [0,0,0,1,0,0] },
-#         { u'0': [1,0,0,0,0,0] },
-#         { u'0': [1,0,0,0,0,0] },
-#     ]
-# })
-# exit()
-
-seed(1)
 def Sort(sub_li): 
   
     # reverse = None (Sorts in Ascending order) 
@@ -142,45 +116,58 @@ def create_next_gen(pop, ideal, purity = 23 ):
 
 # ideal = [[1,0,0,1,0,1],[1,0,0,1,0,0],[0,0,0,1,0,0],[1,0,0,0,0,0],[1,0,0,0,0,0]]
 ### testing class capabilities      
-points =[]
-generation = generate_population(100)
-whole = get_scores(generation,ideal)
-scores = [item[1] for item in whole]
-score = sum(scores)/len(scores)
-print(score)
 
-for i in range(100):
-    generation = create_next_gen(generation, ideal)
-    print("Generation:", i)
+def main(request):
+    request_json = request.get_json()
+    projectId = ''
+    if request_json and 'projectId' in request_json:
+        projectId = request_json['projectId']
+    else:
+        return f'Project Id required'
+
+    ideal = []
+
+    doc_ref = db.collection(u'projects').document(projectId)
+    project_doc = doc_ref.get()
+    if project_doc.exists:
+        data = project_doc.to_dict()
+        if 'ideal' in data:
+            idealData = data['ideal']
+            for i in idealData:
+                ideal.append(i['0'])
+            print(f'ideal: {ideal}')
+    else:
+        return f'Invalid project id provided'
+
+    seed(1)
+
+    points =[]
+    generation = generate_population(100)
     whole = get_scores(generation,ideal)
     scores = [item[1] for item in whole]
     score = sum(scores)/len(scores)
-    points.append(score)
+    print(score)
 
-plt.plot(points)
-plt.ylabel('Fitness Score')
-plt.xlabel('Generation')
-plt.show()
+    for i in range(100):
+        generation = create_next_gen(generation, ideal)
+        print("Generation:", i)
+        whole = get_scores(generation,ideal)
+        scores = [item[1] for item in whole]
+        score = sum(scores)/len(scores)
+        points.append(score)
 
-final_chromosome = generation[0].chromesome
-output = {}
-for c in range(0, len(final_chromosome)):
-    output[str(c)] = final_chromosome[c]
+    # plt.plot(points)
+    # plt.ylabel('Fitness Score')
+    # plt.xlabel('Generation')
+    # plt.show()
 
-doc_ref.update({
-    u'grid': output,
-})
-print("final generation, 0th lad: ", output)
-exit()
-    
-    
+    final_chromosome = generation[0].chromesome
+    output = {}
+    for c in range(0, len(final_chromosome)):
+        output[str(c)] = final_chromosome[c]
 
-
-
-
-
-
-
-
-
-  
+    doc_ref.update({
+        u'grid': output,
+    })
+    print("final generation, 0th lad: ", output)
+    return f'Request successful'
