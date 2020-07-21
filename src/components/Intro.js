@@ -13,7 +13,10 @@ const Intro = (props) => {
                 Bitbeatz
             </Typography>
             <Typography variant="h4" align="center">
-                Unleash the power of genetic algorithms to create music alone or with friends
+                Unleash the power of genetic algorithms.
+            </Typography>
+            <Typography variant="h4" align="center">
+                Create music with friends.
             </Typography>
         </div>
     )
