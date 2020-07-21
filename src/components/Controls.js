@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import axios from 'axios'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
@@ -11,7 +12,7 @@ import {db} from '../firebase/firebase';
 import {DEFAULT_CONTROLS, DEFAULT_LOCKS, lengthMarks, varMarks, marks} from './constants';
 import {Avatar} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -87,6 +88,29 @@ const Controls = (props) => {
         setLoopLength(newVal);
     };
 
+    const handleLocationsChange = (loc) => {
+        if (locations[props.username] === loc) {
+            setLocations[props.username] = '';
+            updateFireStoreLocations('');
+        } else {
+            setLocations[props.username] = loc;
+            updateFireStoreLocations(loc);
+        }
+    };
+
+    const handleGenerate = () => {
+        axios({
+            method: 'post',
+            url: 'https://us-east1-bitbeatz-48669.cloudfunctions.net/run_genetic_algorithm',
+            data: {
+                projectId: props.projectId,
+            },
+        })
+            .then(res => {
+                console.log(res)
+            })
+            .catch(e => console.log(e))
+    }
 
     const updateFireStoreControls = () => {
         db.collection('projects').doc(props.projectId).update({
@@ -100,16 +124,6 @@ const Controls = (props) => {
                 console.log('updated controls successfully')
             })
             .catch(e => console.error(e))
-    };
-
-    const handleLocationsChange = (loc) => {
-        if (locations[props.username] === loc) {
-            setLocations[props.username] = '';
-            updateFireStoreLocations('');
-        } else {
-            setLocations[props.username] = loc;
-            updateFireStoreLocations(loc);
-        }
     };
 
     const updateFireStoreLocations = (loc) => {
@@ -146,7 +160,7 @@ const Controls = (props) => {
                         Tempo (bpm)
                     </Grid>
                     <Grid item xs>
-                        {locations[props.username] !== 'tempo' ?
+                        { locations[props.username] !== 'tempo' ?
                             <Tooltip
                                 title={'Tempo is Locked'}
                                 arrow
@@ -196,7 +210,7 @@ const Controls = (props) => {
                         Random Variation
                     </Grid>
                     <Grid item xs>
-                        {locations[props.username] !== 'variation' ?
+                        { locations[props.username] !== 'variation' ?
                             <Tooltip
                                 title={'Random Variation is Locked'}
                                 arrow
@@ -242,7 +256,7 @@ const Controls = (props) => {
                         Loop Length (beats)
                     </Grid>
                     <Grid item xs>
-                        {locations[props.username] !== 'loopLength' ?
+                        { locations[props.username] !== 'loopLength' ?
                             <Tooltip
                                 title={'Loop Length is Locked'}
                                 arrow
@@ -273,7 +287,7 @@ const Controls = (props) => {
                         }
                     </Grid>
                 </Grid>
-                <Button variant={'contained'} color={'primary'} className={classes.generateButton}>
+                <Button variant={'contained'} color={'primary'} className={classes.generateButton} onClick={handleGenerate}>
                     GENERATE PERCUSSION
                 </Button>
             </Container>

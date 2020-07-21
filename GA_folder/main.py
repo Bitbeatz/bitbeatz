@@ -1,4 +1,5 @@
 import numpy
+from flask import Response
 from random import seed
 from random import randint
 from random import shuffle
@@ -118,6 +119,12 @@ def create_next_gen(pop, ideal, purity = 23 ):
 ### testing class capabilities      
 
 def main(request):
+    if request.method == 'OPTIONS':
+        resp = Response("okie dokie")
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        resp.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+        return resp
+
     request_json = request.get_json()
     projectId = ''
     if request_json and 'projectId' in request_json:
@@ -170,4 +177,8 @@ def main(request):
         u'grid': output,
     })
     print("final generation, 0th lad: ", output)
-    return f'Request successful'
+    
+    resp = Response("Request successful")
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+    return resp

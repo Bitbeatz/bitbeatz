@@ -4,3 +4,4 @@
 numpy>=1.19
 matplotlib>=3.2.2
 firebase-admin>=4.3
+FLask>=1.1
