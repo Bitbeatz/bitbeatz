@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { Avatar, Fab, Grid, List, ListItem, ListItemAvatar, ListItemText, TextField } from '@material-ui/core'
+import { Avatar, Fab, Grid, List, ListItem, ListItemAvatar, ListItemText, ListSubheader, TextField } from '@material-ui/core'
 import { Send as SendIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import firebase from 'firebase'
@@ -17,6 +17,16 @@ const useStyles = makeStyles((theme) => ({
         width: theme.spacing(4),
         height: theme.spacing(4),
     },
+    list: {
+        margin: '10px',
+        maxHeight: '232px',
+        overflow: 'auto',
+        backgroundColor: 'white',
+        padding: 0
+    },
+    chatText: {
+        overflowWrap: 'break-word'
+    }
 }))
 
 const Chat = (props) => {
@@ -33,7 +43,7 @@ const Chat = (props) => {
             chatMessages: firebase.firestore.FieldValue.arrayUnion({
                 text: currentMessage,
                 user,
-                time: Date(Date.now()),
+                time: Date.now(),
             }),
         })
             .then(() => {
@@ -43,27 +53,35 @@ const Chat = (props) => {
     }
 
     const handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && currentMessage) {
             handleSendMessage()
         }
     }
 
     const render = () => (
         <Grid>
-            <List dense={true} style={{ padding: '10px' }}>
+            <List dense={true} className={classes.list}>
+                <ListSubheader>Chat</ListSubheader>
                 { messages.map(message => {
                     // const date = new Date(message.time)
                     // const hours = date.getHours()
                     // const minutes = date.getMinutes()
-                    return <ListItem key={message.time}>
-                        <ListItemAvatar>
-                            <Avatar className={classes.avatar}>{ message.user[0].toUpperCase() }</Avatar>
-                        </ListItemAvatar>
-                        <ListItemText align={user === message.user ? 'right' : 'left'} primary={message.text}></ListItemText>
-                        { /* <Grid item xs={12}>
-                            <ListItemText align="right" primaryTypographyProps={{ variant: 'body2' }} secondary={`${hours}:${minutes}`}></ListItemText>
-                        </Grid> */ }
-                    </ListItem>
+                    if (message.text) {
+                        return <ListItem key={message.time}>
+                            <ListItemAvatar>
+                                <Avatar className={classes.avatar}>{ message.user[0].toUpperCase() }</Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                                align={user === message.user ? 'right' : 'left'}
+                                secondary={message.text}
+                                className={classes.chatText}
+                            />
+                            { /* <Grid item xs={12}>
+                                <ListItemText align="right" primaryTypographyProps={{ variant: 'body2' }} secondary={`${hours}:${minutes}`}></ListItemText>
+                            </Grid> */ }
+                        </ListItem>
+
+                    }
                 }) }
             </List>
             <Grid container style={{padding: '20px'}}>
@@ -77,8 +95,8 @@ const Chat = (props) => {
                         onKeyPress={handleKeyPress}
                     />
                 </Grid>
-                <Grid item xs={3} align="right" alignItems="center">
-                    <Fab color="primary" aria-label="send" onClick={handleSendMessage}>
+                <Grid item xs={3} align="right">
+                    <Fab color="primary" aria-label="send" size="medium" onClick={handleSendMessage}>
                         <SendIcon className={classes.send} />
                     </Fab>
                 </Grid>

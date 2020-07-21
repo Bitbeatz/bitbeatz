@@ -6,6 +6,10 @@ import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Container from '@material-ui/core/Container'
 import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import Grid from '@material-ui/core/Grid'
+import FileCopy from '@material-ui/icons/FileCopy'
+import {CopyToClipboard} from 'react-copy-to-clipboard'
 
 import history from '../history'
 
@@ -47,9 +51,16 @@ const Share = (props) => {
                     <Typography variant="body2" className={classes.left}>
                         Share the following code with anyone you want to join your project
                     </Typography>
-                    <Typography>
-                        { projectId }
-                    </Typography>
+                    <Grid container justify="center" alignItems="center">
+                        <Typography>
+                            { projectId }
+                        </Typography>
+                        <CopyToClipboard text={projectId}>
+                            <IconButton color="inherit" aria-label="menu">
+                                <FileCopy />
+                            </IconButton>
+                        </CopyToClipboard>
+                    </Grid>
                     <Button
                         variant="contained"
                         color='secondary'

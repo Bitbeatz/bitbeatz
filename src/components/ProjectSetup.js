@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import {ThemeProvider, withStyles} from '@material-ui/styles'
 
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
@@ -9,12 +8,12 @@ import Container from '@material-ui/core/Container'
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import Button from '@material-ui/core/Button'
 import Tooltip from '@material-ui/core/Tooltip'
-import { createMuiTheme } from '@material-ui/core/styles'
 import {db} from '../firebase/firebase';
 import {connect} from 'react-redux';
 import Share from './Share';
 
-import { DEFAULT_GRID } from './constants'
+import {DEFAULT_CONTROLS, DEFAULT_GRIDS } from './constants'
+import withStyles from '@material-ui/core/styles/withStyles';
 
 const styles = () => ({
     paper: {
@@ -58,11 +57,16 @@ const ProjectSetup = (props) => {
             setErrorMsg('Please select a genre');
         }
         else {
+            // TODO change from .jazz to genre after making more consts
             await db.collection('projects').add({
-                name: projectName,
+                controls: DEFAULT_CONTROLS,
                 genre: genre,
+                grid: DEFAULT_GRIDS.jazz,
+                ideal: DEFAULT_GRIDS.jazz,
+                locations: {[props.user]: ''},
+                locksDisabled: false,
+                name: projectName,
                 users: [props.user],
-                grid: DEFAULT_GRID,
             }).then((docRef) => {
                 setProjectId(docRef.id);
             }).catch((e) => {
@@ -103,19 +107,19 @@ const ProjectSetup = (props) => {
                             </Fab>
                         </Tooltip>
                         <ButtonGroup>
-                            <Button variant="contained" color={genre === 'jazz' ? 'primary' : ''}
+                            <Button variant="contained" color={genre === 'jazz' ? 'primary' : 'default'}
                                 onClick={() => setGenre('jazz')}>
                                 Jazz
                             </Button>
-                            <Button variant="contained" color={genre === 'rock' ? 'primary' : ''}
+                            <Button variant="contained" color={genre === 'rock' ? 'primary' : 'default'}
                                 onClick={() => setGenre('rock')}>
                                 Rock
                             </Button>
-                            <Button variant="contained" color={genre === 'clas' ? 'primary' : ''}
+                            <Button variant="contained" color={genre === 'clas' ? 'primary' : 'default'}
                                 onClick={() => setGenre('clas')}>
                                 Classical
                             </Button>
-                            <Button variant="contained" color={genre === 'edm' ? 'primary' : ''}
+                            <Button variant="contained" color={genre === 'edm' ? 'primary' : 'default'}
                                 onClick={() => setGenre('edm')}>
                                 EDM
                             </Button>
@@ -123,7 +127,7 @@ const ProjectSetup = (props) => {
                         <Typography variant="body2">
                             or
                         </Typography>
-                        <Button variant="contained" color={genre === 'blank' ? 'primary' : ''}
+                        <Button variant="contained" color={genre === 'blank' ? 'primary' : 'default'}
                             onClick={() => setGenre('blank')}>
                             Start From Scratch
                         </Button>

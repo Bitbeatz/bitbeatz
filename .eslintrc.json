@@ -31,10 +31,6 @@
             "error",
             "single"
         ],
-        "semi": [
-            "error",
-            "never"
-        ],
         "no-console": [
             "warn"
         ],
@@ -43,10 +39,6 @@
         ],
         "no-empty-function": [
             "warn"
-        ],
-        "comma-dangle": [
-            "error",
-            "always-multiline"
         ],
         "no-trailing-spaces": [
             "error"

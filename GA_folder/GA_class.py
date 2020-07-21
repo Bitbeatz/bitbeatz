@@ -160,12 +160,12 @@ plt.xlabel('Generation')
 plt.show()
 
 final_chromosome = generation[0].chromesome
-output = []
-for c in final_chromosome:
-    output.append({ '0': c })
+output = {}
+for c in range(0, len(final_chromosome)):
+    output[str(c)] = final_chromosome[c]
 
 doc_ref.update({
-    u'output': output
+    u'grid': output,
 })
 print("final generation, 0th lad: ", output)
 exit()

@@ -75,9 +75,10 @@ const receiveCreateUser = (user) => {
     }
 }
 
-const createUserError = () => {
+const createUserError = (error) => {
     return {
         type: CREATE_USER_FAILURE,
+        error,
     }
 }
 
@@ -90,7 +91,7 @@ export const createUser = (email, password) => dispatch => {
             dispatch(receiveCreateUser(user))
         })
         .catch(error => {
-            dispatch(createUserError())
+            dispatch(createUserError(error.message || 'Something went wrong.'))
         })
 }
 
