@@ -1,5 +1,5 @@
 import numpy
-from flask import Response
+import flask
 from random import seed
 from random import randint
 from random import shuffle
@@ -119,10 +119,10 @@ def create_next_gen(pop, ideal, purity = 23 ):
 ### testing class capabilities      
 
 def main(request):
+    resp = flask.Response("okie dokie")
+    resp.headers.set('Access-Control-Allow-Origin', '*')
+    resp.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type'
     if request.method == 'OPTIONS':
-        resp = Response("okie dokie")
-        resp.headers['Access-Control-Allow-Origin'] = '*'
-        resp.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
         return resp
 
     request_json = request.get_json()
@@ -130,7 +130,8 @@ def main(request):
     if request_json and 'projectId' in request_json:
         projectId = request_json['projectId']
     else:
-        return f'Project Id required'
+        resp.data = 'Project Id required'
+        return resp
 
     ideal = []
 
@@ -144,7 +145,8 @@ def main(request):
                 ideal.append(i['0'])
             print(f'ideal: {ideal}')
     else:
-        return f'Invalid project id provided'
+        resp.data = 'Invalid Project Id'
+        return resp
 
     seed(1)
 
@@ -178,7 +180,5 @@ def main(request):
     })
     print("final generation, 0th lad: ", output)
     
-    resp = Response("Request successful")
-    resp.headers['Access-Control-Allow-Origin'] = '*'
-    resp.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+    resp.data = 'Request successful'
     return resp

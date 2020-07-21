@@ -14,6 +14,17 @@ export const DEFAULT_GRIDS = {
         4: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
 };
+
+export const DEFAULT_IDEALS = {
+    jazz: [
+        {0: [1,0,0,1,0,1]},
+        {0: [1,0,0,1,0,0]},
+        {0: [0,0,0,1,0,0]},
+        {0: [1,0,0,0,0,0]},
+        {0: [1,0,0,0,0,0]}
+    ]
+};
+
 export const DEFAULT_CONTROLS = {
     tempo: 100,
     variation: 10,

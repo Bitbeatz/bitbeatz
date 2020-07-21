@@ -12,7 +12,7 @@ import {db} from '../firebase/firebase';
 import {connect} from 'react-redux';
 import Share from './Share';
 
-import {DEFAULT_CONTROLS, DEFAULT_GRIDS } from './constants'
+import { DEFAULT_CONTROLS, DEFAULT_GRIDS, DEFAULT_IDEALS } from './constants'
 import withStyles from '@material-ui/core/styles/withStyles';
 
 const styles = () => ({
@@ -62,7 +62,7 @@ const ProjectSetup = (props) => {
                 controls: DEFAULT_CONTROLS,
                 genre: genre,
                 grid: DEFAULT_GRIDS.jazz,
-                ideal: DEFAULT_GRIDS.jazz,
+                ideal: DEFAULT_IDEALS.jazz,
                 locations: {[props.user]: ''},
                 locksDisabled: false,
                 name: projectName,
