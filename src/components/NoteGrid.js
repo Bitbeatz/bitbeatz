@@ -159,20 +159,27 @@ class NoteGrid extends Component {
                         <Grid container>
                             <Grid item>
                                 { !this.state.locked[i] ?
-                                    <Radio
-                                        icon={<Lock/>}
-                                        checkedIcon={<LockOpen/>}
-                                        value={i}
-                                        onClick={() => this.handleLocationsChange(i)}
-                                        checked={this.state.locations[this.props.username] === i}
-                                    /> :
-                                    <Avatar className={classes.avatar}>{ this.state.locked[i] }</Avatar>
+                                    <Tooltip title={this.state.locations[this.props.username] === i ? 'Stop modifying control' : 'Modify control'}>
+                                        <Radio
+                                            icon={<Lock/>}
+                                            checkedIcon={<LockOpen/>}
+                                            value={i}
+                                            onClick={() => this.handleLocationsChange(i)}
+                                            checked={this.state.locations[this.props.username] === i}
+                                        />
+                                    </Tooltip>
+                                    :
+                                    <Tooltip title={'Another user is currently modifying this control'}>
+                                        <Avatar className={classes.avatar}>{ this.state.locked[i] }</Avatar>
+                                    </Tooltip>
                                 }
                             </Grid>
                             <Grid item key={i} spacing={0}>
-                                <Button id={this.state.drums[i]} fullWidth variant="text" size="small" onClick={this.handleLabelClick}>
-                                    {this.state.drums[i]}
-                                </Button>
+                                <Tooltip title={"Play sound"}>
+                                    <Button id={this.state.drums[i]} fullWidth variant="text" size="small" onClick={this.handleLabelClick}>
+                                        {this.state.drums[i]}
+                                    </Button>
+                                </Tooltip>
                             </Grid>
                         </Grid>
                     ))}
@@ -206,7 +213,6 @@ class NoteGrid extends Component {
                                                 id={(i * 24) + j}
                                                 key={(i * 24) + j}
                                                 className={classes.button}
-                                                color={"secondary"}
                                                 style={{backgroundColor: active ? '#f50057' : 'white'}}
                                                 onClick={this.handleGridClick}>
                                             </Button>
