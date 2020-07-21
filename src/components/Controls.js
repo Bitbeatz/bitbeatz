@@ -170,6 +170,7 @@ const Controls = (props) => {
                                         value={tempo}
                                         valueLabelDisplay="auto"
                                         marks={marks}
+                                        color={"secondary"}
                                         max={200}
                                         min={40}
                                         disabled={true}
@@ -180,6 +181,7 @@ const Controls = (props) => {
                                 value={tempo}
                                 valueLabelDisplay="auto"
                                 marks={marks}
+                                color={"secondary"}
                                 max={200}
                                 min={40}
                                 disabled={false}
@@ -220,6 +222,7 @@ const Controls = (props) => {
                                         value={variation}
                                         valueLabelDisplay="auto"
                                         marks={varMarks}
+                                        color={"secondary"}
                                         disabled={true}
                                     />
                                 </div>
@@ -228,6 +231,7 @@ const Controls = (props) => {
                                 value={variation}
                                 valueLabelDisplay="auto"
                                 marks={varMarks}
+                                color={"secondary"}
                                 disabled={false}
                                 onChange={handleVariationChange}
                                 onChangeCommitted={updateFireStoreControls}
@@ -266,6 +270,7 @@ const Controls = (props) => {
                                         value={loopLength}
                                         valueLabelDisplay="auto"
                                         marks={lengthMarks}
+                                        color={"secondary"}
                                         step={null}
                                         max={8}
                                         min={2}
@@ -277,6 +282,7 @@ const Controls = (props) => {
                                 value={loopLength}
                                 valueLabelDisplay="auto"
                                 marks={lengthMarks}
+                                color={"secondary"}
                                 step={null}
                                 max={8}
                                 min={2}

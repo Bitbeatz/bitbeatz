@@ -170,7 +170,9 @@ class NoteGrid extends Component {
                                 }
                             </Grid>
                             <Grid item key={i} spacing={0}>
-                                <Button id={this.state.drums[i]} fullWidth variant="text" size="small" onClick={this.handleLabelClick}>{this.state.drums[i]}</Button>
+                                <Button id={this.state.drums[i]} fullWidth variant="text" size="small" onClick={this.handleLabelClick}>
+                                    {this.state.drums[i]}
+                                </Button>
                             </Grid>
                         </Grid>
                     ))}
@@ -190,7 +192,7 @@ class NoteGrid extends Component {
                                                     id={(i * 24) + j}
                                                     key={(i * 24) + j}
                                                     className={classes.button}
-                                                    style={{backgroundColor: active ? 'red' : 'white'}}
+                                                    style={{backgroundColor: active ? '#BDBDBD' : 'white'}}
                                                     onClick={this.handleGridClick}>
                                                 </Button>
                                             ))}
@@ -204,7 +206,8 @@ class NoteGrid extends Component {
                                                 id={(i * 24) + j}
                                                 key={(i * 24) + j}
                                                 className={classes.button}
-                                                style={{backgroundColor: active ? 'red' : 'white'}}
+                                                color={"secondary"}
+                                                style={{backgroundColor: active ? '#f50057' : 'white'}}
                                                 onClick={this.handleGridClick}>
                                             </Button>
                                         ))}
