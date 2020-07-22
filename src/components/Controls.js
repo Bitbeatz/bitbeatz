@@ -14,6 +14,7 @@ import {Avatar} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from "@material-ui/core/Typography";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
         height: theme.spacing(3),
     },
     generateButton: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         marginTop: 20
     }
 }));
@@ -40,6 +44,7 @@ const Controls = (props) => {
     const [loopLength, setLoopLength] = useState(DEFAULT_CONTROLS.loopLength);
     const [locations, setLocations] = useState({[props.username]: ''});
     const [locked, setLocked] = useState(DEFAULT_LOCKS.controls);
+    const [generating, setGenerating] = useState(false);
 
     useEffect(() => {
         window.addEventListener('beforeunload', (ev) => {
@@ -100,6 +105,7 @@ const Controls = (props) => {
     };
 
     const handleGenerate = () => {
+        setGenerating(true)
         axios({
             method: 'post',
             url: 'https://us-east1-bitbeatz-48669.cloudfunctions.net/run_genetic_algorithm',
@@ -109,8 +115,12 @@ const Controls = (props) => {
         })
             .then(res => {
                 console.log(res)
+                setGenerating(false)
             })
-            .catch(e => console.log(e))
+            .catch(e => {
+                console.log(e)
+                setGenerating(false)
+            })
     }
 
     const updateFireStoreControls = () => {
@@ -306,9 +316,12 @@ const Controls = (props) => {
                         }
                     </Grid>
                 </Grid>
-                <Button variant={'contained'} color={'primary'} className={classes.generateButton} onClick={handleGenerate}>
-                    GENERATE PERCUSSION
-                </Button>
+                <div className={classes.generateButton}>
+                    <Button variant={'contained'} color={'primary'} onClick={handleGenerate}>
+                        GENERATE PERCUSSION
+                    </Button>
+                    { generating && <CircularProgress style={{ marginLeft: '20px' }}/> }
+                </div>
             </Container>
         )
     };
