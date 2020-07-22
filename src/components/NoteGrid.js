@@ -7,6 +7,7 @@ import {Avatar, Grid} from '@material-ui/core';
 import { ButtonGroup } from '@material-ui/core';
 
 import {db} from '../firebase/firebase';
+import {myFirebase} from '../firebase/firebase';
 import {DEFAULT_GRIDS, DEFAULT_LOCKS} from './constants'
 import {Lock, LockOpen} from "@material-ui/icons";
 import Radio from "@material-ui/core/Radio";
@@ -91,13 +92,77 @@ class NoteGrid extends Component {
 
     handleLabelClick = (event) => {
         // Do whatever needs to be done when label is clicked
-        // Play the sound?
+        // Play the sound
+        var storage = myFirebase.storage();
+        var storageRef = storage.ref();
+        var url_ref = storageRef;
+        switch (event.currentTarget.id) {
+            case "Ride":
+                // Ride
+                url_ref = storageRef.child('drum_sounds/ride.wav');
+                console.log("Ride")
+                break;
+            case "Bass":
+                // Bass
+                url_ref = storageRef.child('drum_sounds/bass.wav');
+                console.log("Bass")
+                break;
+            case "Hi-Hat":
+                // Hi Hat
+                url_ref = storageRef.child('drum_sounds/hi_hat.wav');
+                console.log("Hi Hat")
+                break;
+            case "Snare":
+                // Snare
+                url_ref = storageRef.child('drum_sounds/snare.wav');
+                console.log("Snare")
+                break;
+            case "Low Tom":
+                // Low Tom
+                url_ref = storageRef.child('drum_sounds/low_tom.wav');
+                console.log("Low Tom")
+                break;
+            default:
+                // Do nothing
+                console.log("No IDs match");
+        }
+
+        url_ref.getDownloadURL().then(function(url) {
+            var audio = new Audio(url);
+            audio.play();
+          }).catch(function(error) {
+          
+            // A full list of error codes is available at
+            // https://firebase.google.com/docs/storage/web/handle-errors
+            switch (error.code) {
+              case 'storage/object-not-found':
+                // File doesn't exist
+                console.log("Download Error: storage/object-not-found")
+                break;
+          
+              case 'storage/unauthorized':
+                // User doesn't have permission to access the object
+                console.log("Download Error: storage/unauthorized")
+                break;
+          
+              case 'storage/canceled':
+                // User canceled the upload
+                console.log("Download Error: storage/canceled")
+                break;
+          
+              case 'storage/unknown':
+                // Unknown error occurred, inspect the server response
+                console.log("Download Error: storage/unknown")
+                break;
+            }
+          });
     }
 
     handleGridClick = (event) => {
         // Handle update to grid square
         // Update grid locally (change grid colour and state)
-        var id = event.target.id
+        var id = event.target.id;
+        console.log(event.target.id)
         var row = Math.floor(id / 24)
         var col = id % 24
         var val = this.state.grid[row][col]
@@ -159,20 +224,27 @@ class NoteGrid extends Component {
                         <Grid container>
                             <Grid item>
                                 { !this.state.locked[i] ?
-                                    <Radio
-                                        icon={<Lock/>}
-                                        checkedIcon={<LockOpen/>}
-                                        value={i}
-                                        onClick={() => this.handleLocationsChange(i)}
-                                        checked={this.state.locations[this.props.username] === i}
-                                    /> :
-                                    <Avatar className={classes.avatar}>{ this.state.locked[i] }</Avatar>
+                                    <Tooltip title={this.state.locations[this.props.username] === i ? 'Stop modifying control' : 'Modify control'}>
+                                        <Radio
+                                            icon={<Lock/>}
+                                            checkedIcon={<LockOpen/>}
+                                            value={i}
+                                            onClick={() => this.handleLocationsChange(i)}
+                                            checked={this.state.locations[this.props.username] === i}
+                                        />
+                                    </Tooltip>
+                                    :
+                                    <Tooltip title={'Another user is currently modifying this control'}>
+                                        <Avatar className={classes.avatar}>{ this.state.locked[i] }</Avatar>
+                                    </Tooltip>
                                 }
                             </Grid>
                             <Grid item key={i} spacing={0}>
-                                <Button id={this.state.drums[i]} fullWidth variant="text" size="small" onClick={this.handleLabelClick}>
-                                    {this.state.drums[i]}
-                                </Button>
+                                <Tooltip title={"Play sound"}>
+                                    <Button id={this.state.drums[i]} fullWidth variant="text" size="small" onClick={this.handleLabelClick}>
+                                        {this.state.drums[i]}
+                                    </Button>
+                                </Tooltip>
                             </Grid>
                         </Grid>
                     ))}
@@ -206,7 +278,6 @@ class NoteGrid extends Component {
                                                 id={(i * 24) + j}
                                                 key={(i * 24) + j}
                                                 className={classes.button}
-                                                color={"secondary"}
                                                 style={{backgroundColor: active ? '#f50057' : 'white'}}
                                                 onClick={this.handleGridClick}>
                                             </Button>

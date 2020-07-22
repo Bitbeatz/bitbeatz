@@ -14,6 +14,7 @@ import {db} from '../firebase/firebase'
 import NoteGrid from './NoteGrid'
 import Chat from './Chat'
 import {DEFAULT_CONTROLS, DEFAULT_GRIDS } from './constants'
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -111,9 +112,11 @@ const Project = (props) => {
                                     <Grid item xs={12}>
                                         <Paper className={classes.gridPaper}>
                                             <Box display="flex" justifyContent="center" alignItems="center" className={classes.overflow}>
-                                                <IconButton color="primary" aria-label="menu" onClick={() => setPlaying(!playing)}>
-                                                    { !playing ? <PlayCircleFilled /> : <PauseCircleFilled /> }
-                                                </IconButton>
+                                                <Tooltip title={!playing ? "Play song" : "Pause song"}>
+                                                    <IconButton color="primary" aria-label="menu" onClick={() => setPlaying(!playing)}>
+                                                        { !playing ? <PlayCircleFilled /> : <PauseCircleFilled /> }
+                                                    </IconButton>
+                                                </Tooltip>
                                                 <NoteGrid projectId={projectId} grid={project.grid} controls={project.controls} locations={project.locations}/>
                                             </Box>
                                         </Paper>

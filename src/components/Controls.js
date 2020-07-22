@@ -13,6 +13,7 @@ import {DEFAULT_CONTROLS, DEFAULT_LOCKS, lengthMarks, varMarks, marks} from './c
 import {Avatar} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -142,22 +143,25 @@ const Controls = (props) => {
                 <Grid container spacing={3}>
                     <Grid item xs={1}>
                         { !locked.tempo ?
-                            <FormControlLabel
-                                control={
-                                    <Radio
-                                        icon={<Lock />}
-                                        checkedIcon={<LockOpen />}
-                                        value={'tempo'}
-                                        onClick={() => handleLocationsChange('tempo')}
-                                        checked={locations[props.username] === 'tempo'}
-                                    />
-                                }
-                            /> :
-                            <Avatar className={classes.avatar}>{ locked.tempo }</Avatar>
+                            <Tooltip title={locations[props.username] === 'tempo' ? 'Stop modifying control' : 'Modify control'}>
+                                <Radio
+                                    icon={<Lock />}
+                                    checkedIcon={<LockOpen />}
+                                    value={'tempo'}
+                                    onClick={() => handleLocationsChange('tempo')}
+                                    checked={locations[props.username] === 'tempo'}
+                                />
+                            </Tooltip>
+                            :
+                            <Tooltip title={'Another user is currently modifying this control'}>
+                                <Avatar className={classes.avatar}>{ locked.tempo }</Avatar>
+                            </Tooltip>
                         }
                     </Grid>
                     <Grid item xs={2}>
-                        Tempo (bpm)
+                        <Tooltip title={"Speed of the song in beats per minute"}>
+                            <Typography variant="body2">Tempo (bpm)</Typography>
+                        </Tooltip>
                     </Grid>
                     <Grid item xs>
                         { locations[props.username] !== 'tempo' ?
@@ -194,22 +198,25 @@ const Controls = (props) => {
                 <Grid container spacing={3}>
                     <Grid item xs={1}>
                         { !locked.variation ?
-                            <FormControlLabel
-                                control={
-                                    <Radio
-                                        icon={<Lock />}
-                                        checkedIcon={<LockOpen />}
-                                        value={'variation'}
-                                        onClick={() => handleLocationsChange('variation')}
-                                        checked={locations[props.username] === 'variation'}
-                                    />
-                                }
-                            /> :
-                            <Avatar className={classes.avatar}>{ locked.variation }</Avatar>
+                            <Tooltip title={locations[props.username] === 'variation' ? 'Stop modifying control' : 'Modify control'}>
+                                <Radio
+                                    icon={<Lock />}
+                                    checkedIcon={<LockOpen />}
+                                    value={'variation'}
+                                    onClick={() => handleLocationsChange('variation')}
+                                    checked={locations[props.username] === 'variation'}
+                                />
+                            </Tooltip>
+                            :
+                            <Tooltip title={'Another user is currently modifying this control'}>
+                                <Avatar className={classes.avatar}>{ locked.variation }</Avatar>
+                            </Tooltip>
                         }
                     </Grid>
                     <Grid item xs={2}>
-                        Random Variation
+                        <Tooltip title={"Changes to the song caused by the algorithm"}>
+                            <Typography variant="body2">Random Variation</Typography>
+                        </Tooltip>
                     </Grid>
                     <Grid item xs>
                         { locations[props.username] !== 'variation' ?
@@ -222,6 +229,7 @@ const Controls = (props) => {
                                         value={variation}
                                         valueLabelDisplay="auto"
                                         marks={varMarks}
+                                        max={40}
                                         color={"secondary"}
                                         disabled={true}
                                     />
@@ -230,7 +238,9 @@ const Controls = (props) => {
                             <Slider
                                 value={variation}
                                 valueLabelDisplay="auto"
+                                valueLabelFormat={variation + '%'}
                                 marks={varMarks}
+                                max={40}
                                 color={"secondary"}
                                 disabled={false}
                                 onChange={handleVariationChange}
@@ -242,22 +252,25 @@ const Controls = (props) => {
                 <Grid container spacing={3}>
                     <Grid item xs={1}>
                         { !locked.loopLength ?
-                            <FormControlLabel
-                                control={
-                                    <Radio
-                                        icon={<Lock />}
-                                        checkedIcon={<LockOpen />}
-                                        value={'loopLength'}
-                                        onClick={() => handleLocationsChange('loopLength')}
-                                        checked={locations[props.username] === 'loopLength'}
-                                    />
-                                }
-                            /> :
-                            <Avatar className={classes.avatar}>{ locked.loopLength }</Avatar>
+                            <Tooltip title={locations[props.username] === 'loopLength' ? 'Stop modifying control' : 'Modify control'}>
+                                <Radio
+                                    icon={<Lock />}
+                                    checkedIcon={<LockOpen />}
+                                    value={'loopLength'}
+                                    onClick={() => handleLocationsChange('loopLength')}
+                                    checked={locations[props.username] === 'loopLength'}
+                                />
+                            </Tooltip>
+                            :
+                            <Tooltip title={'Another user is currently modifying this control'}>
+                                <Avatar className={classes.avatar}>{ locked.loopLength }</Avatar>
+                            </Tooltip>
                         }
                     </Grid>
                     <Grid item xs={2}>
-                        Loop Length (beats)
+                        <Tooltip title={"Length of the song before it replays"}>
+                            <Typography variant="body2">Loop Length (beats)</Typography>
+                        </Tooltip>
                     </Grid>
                     <Grid item xs>
                         { locations[props.username] !== 'loopLength' ?
