@@ -7,6 +7,7 @@ import {Avatar, Grid} from '@material-ui/core';
 import { ButtonGroup } from '@material-ui/core';
 
 import {db} from '../firebase/firebase';
+import {myFirebase} from '../firebase/firebase';
 import {DEFAULT_GRIDS, DEFAULT_LOCKS} from './constants'
 import {Lock, LockOpen} from "@material-ui/icons";
 import Radio from "@material-ui/core/Radio";
@@ -92,6 +93,38 @@ class NoteGrid extends Component {
     handleLabelClick = (event) => {
         // Do whatever needs to be done when label is clicked
         // Play the sound?
+        var id = event.target.id;
+        var storage = myFirebase.storage();
+        var url_ref = '';
+        switch (id) {
+            case 0:
+                // Ride
+                url_ref = storage.ref('drum_sounds/ride.wav');
+                break;
+            case 1:
+                // Bass
+                url_ref = storage.ref('drum_sounds/bass.wav');
+                break;
+            case 2:
+                // Hi Hat
+                url_ref = storage.ref('drum_sounds/hi_hat.wav');
+                break;
+            case 3:
+                // Snare
+                url_ref = storage.ref('drum_sounds/snare.wav');
+                break;
+            case 4:
+                // Low Tom
+                url_ref = storage.ref('drum_sounds/low_tom.wav');
+                break;
+            default:
+                url_ref = '';
+        }
+        
+        url_ref.getDownloadURL().then(function(url) {
+            var audio = new Audio(url);
+            audio.play();
+        })
     }
 
     handleGridClick = (event) => {
