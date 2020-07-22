@@ -12,6 +12,7 @@ import {Lock, LockOpen} from "@material-ui/icons";
 import Radio from "@material-ui/core/Radio";
 import {connect} from "react-redux";
 import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
 
 const styles = () => ({
     '@global': {
@@ -154,7 +155,31 @@ class NoteGrid extends Component {
         const { classes } = this.props
         return (
             <Box display="flex" flexDirection="row" >
-                <Grid container spacing={0} direction="column" xs={2}>
+                <Grid container spacing={0} xs={2}>
+                    <Grid container>
+                        <Grid item>
+                            {'\u00A0'}
+                        </Grid>
+                        <Grid item spacing={0}>
+                            {'\u00A0'}
+                        </Grid>
+                    </Grid>
+                    <Grid container>
+                        <Grid item>
+                            {'\u00A0'}
+                        </Grid>
+                        <Grid item spacing={0}>
+                            {'\u00A0'}
+                        </Grid>
+                    </Grid>
+                    <Grid container>
+                        <Grid item>
+                            {'\u00A0'}
+                        </Grid>
+                        <Grid item spacing={0}>
+                            {'\u00A0'}
+                        </Grid>
+                    </Grid>
                     { Object.keys(this.state.drums).map((drum_sound, i) => (
                         <Grid container>
                             <Grid item>
@@ -185,6 +210,24 @@ class NoteGrid extends Component {
                     ))}
                 </Grid>
                 <Grid container spacing={0}>
+                    <Typography variant={"h5"}>
+                        1{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                    </Typography>
+                    <Typography variant={"body1"}>
+                        2{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                    </Typography>
+                    <Typography variant={"body1"}>
+                        3{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                    </Typography>
+                    <Typography variant={"h5"}>
+                        2{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                    </Typography>
+                    <Typography variant={"body1"}>
+                        2{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                    </Typography>
+                    <Typography variant={"body1"}>
+                        3{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                    </Typography>
                     { Object.keys(this.state.grid).map((row, i) => (
                         <Grid container key={i} spacing={0}>
                             { this.state.locations[this.props.username] !== i ?
