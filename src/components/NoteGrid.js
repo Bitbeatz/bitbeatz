@@ -132,7 +132,7 @@ class NoteGrid extends Component {
             var audio = new Audio(url);
             audio.play();
           }).catch(function(error) {
-          
+
             // A full list of error codes is available at
             // https://firebase.google.com/docs/storage/web/handle-errors
             switch (error.code) {
@@ -140,17 +140,17 @@ class NoteGrid extends Component {
                 // File doesn't exist
                 console.log("Download Error: storage/object-not-found")
                 break;
-          
+
               case 'storage/unauthorized':
                 // User doesn't have permission to access the object
                 console.log("Download Error: storage/unauthorized")
                 break;
-          
+
               case 'storage/canceled':
                 // User canceled the upload
                 console.log("Download Error: storage/canceled")
                 break;
-          
+
               case 'storage/unknown':
                 // Unknown error occurred, inspect the server response
                 console.log("Download Error: storage/unknown")
@@ -221,6 +221,7 @@ class NoteGrid extends Component {
         return (
             <Box display="flex" flexDirection="row" >
                 <Grid container spacing={0} xs={2}>
+                    {/*gross quick fix*/}
                     <Grid container>
                         <Grid item>
                             {'\u00A0'}
@@ -275,6 +276,7 @@ class NoteGrid extends Component {
                     ))}
                 </Grid>
                 <Grid container spacing={0}>
+                    {/*gross quick fix*/}
                     <Typography variant={"h5"}>
                         1{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
                     </Typography>
@@ -293,6 +295,70 @@ class NoteGrid extends Component {
                     <Typography variant={"body1"}>
                         3{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
                     </Typography>
+                    {this.props.controls.loopLength > 2 ?
+                        <React.Fragment>
+                            <Typography variant={"h5"}>
+                                3{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                            <Typography variant={"body1"}>
+                                2{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                            <Typography variant={"body1"}>
+                                3{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                            <Typography variant={"h5"}>
+                                4{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                            <Typography variant={"body1"}>
+                                2{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                            <Typography variant={"body1"}>
+                                3{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                        </React.Fragment> :
+                        <span></span>
+                    }
+                    {this.props.controls.loopLength > 4 ?
+                        <React.Fragment>
+                            <Typography variant={"h5"}>
+                                5{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                            <Typography variant={"body1"}>
+                                2{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                            <Typography variant={"body1"}>
+                                3{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                            <Typography variant={"h5"}>
+                                6{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                            <Typography variant={"body1"}>
+                                2{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                            <Typography variant={"body1"}>
+                                3{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                            <Typography variant={"h5"}>
+                                7{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                            <Typography variant={"body1"}>
+                                2{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                            <Typography variant={"body1"}>
+                                3{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                            <Typography variant={"h5"}>
+                                8{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                            <Typography variant={"body1"}>
+                                2{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                            <Typography variant={"body1"}>
+                                3{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+                            </Typography>
+                        </React.Fragment> :
+                        <span></span>
+                    }
                     { Object.keys(this.state.grid).map((row, i) => (
                         <Grid container key={i} spacing={0}>
                             { this.state.locations[this.props.username] !== i ?
