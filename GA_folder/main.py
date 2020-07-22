@@ -8,9 +8,9 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 
-# cred=credentials.Certificate('./adminKey.json')
-# firebase_admin.initialize_app(cred)
-firebase_admin.initialize_app()
+cred=credentials.Certificate('./adminKey.json')
+firebase_admin.initialize_app(cred)
+#firebase_admin.initialize_app()
 
 db = firestore.client()
 
@@ -134,7 +134,7 @@ def main(request):
         return resp
 
     ideal = []
-
+    variate = 5
     doc_ref = db.collection(u'projects').document(projectId)
     project_doc = doc_ref.get()
     if project_doc.exists:
@@ -144,6 +144,8 @@ def main(request):
             for i in idealData:
                 ideal.append(i['0'])
             print(f'ideal: {ideal}')
+        if 'controls' in data:
+            variate = int(50/int(data['controls']['variation']))
     else:
         resp.data = 'Invalid Project Id'
         return resp
@@ -158,7 +160,7 @@ def main(request):
     print(score)
 
     for i in range(100):
-        generation = create_next_gen(generation, ideal)
+        generation = create_next_gen(generation, ideal, variate)
         print("Generation:", i)
         whole = get_scores(generation,ideal)
         scores = [item[1] for item in whole]
