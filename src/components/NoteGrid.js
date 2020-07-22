@@ -92,45 +92,77 @@ class NoteGrid extends Component {
 
     handleLabelClick = (event) => {
         // Do whatever needs to be done when label is clicked
-        // Play the sound?
-        var id = event.target.id;
+        // Play the sound
         var storage = myFirebase.storage();
-        var url_ref = '';
-        switch (id) {
-            case 0:
+        var storageRef = storage.ref();
+        var url_ref = storageRef;
+        switch (event.currentTarget.id) {
+            case "Ride":
                 // Ride
-                url_ref = storage.ref('drum_sounds/ride.wav');
+                url_ref = storageRef.child('drum_sounds/ride.wav');
+                console.log("Ride")
                 break;
-            case 1:
+            case "Bass":
                 // Bass
-                url_ref = storage.ref('drum_sounds/bass.wav');
+                url_ref = storageRef.child('drum_sounds/bass.wav');
+                console.log("Bass")
                 break;
-            case 2:
+            case "Hi-Hat":
                 // Hi Hat
-                url_ref = storage.ref('drum_sounds/hi_hat.wav');
+                url_ref = storageRef.child('drum_sounds/hi_hat.wav');
+                console.log("Hi Hat")
                 break;
-            case 3:
+            case "Snare":
                 // Snare
-                url_ref = storage.ref('drum_sounds/snare.wav');
+                url_ref = storageRef.child('drum_sounds/snare.wav');
+                console.log("Snare")
                 break;
-            case 4:
+            case "Low Tom":
                 // Low Tom
-                url_ref = storage.ref('drum_sounds/low_tom.wav');
+                url_ref = storageRef.child('drum_sounds/low_tom.wav');
+                console.log("Low Tom")
                 break;
             default:
-                url_ref = '';
+                // Do nothing
+                console.log("No IDs match");
         }
-        
+
         url_ref.getDownloadURL().then(function(url) {
             var audio = new Audio(url);
             audio.play();
-        })
+          }).catch(function(error) {
+          
+            // A full list of error codes is available at
+            // https://firebase.google.com/docs/storage/web/handle-errors
+            switch (error.code) {
+              case 'storage/object-not-found':
+                // File doesn't exist
+                console.log("Download Error: storage/object-not-found")
+                break;
+          
+              case 'storage/unauthorized':
+                // User doesn't have permission to access the object
+                console.log("Download Error: storage/unauthorized")
+                break;
+          
+              case 'storage/canceled':
+                // User canceled the upload
+                console.log("Download Error: storage/canceled")
+                break;
+          
+              case 'storage/unknown':
+                // Unknown error occurred, inspect the server response
+                console.log("Download Error: storage/unknown")
+                break;
+            }
+          });
     }
 
     handleGridClick = (event) => {
         // Handle update to grid square
         // Update grid locally (change grid colour and state)
-        var id = event.target.id
+        var id = event.target.id;
+        console.log(event.target.id)
         var row = Math.floor(id / 24)
         var col = id % 24
         var val = this.state.grid[row][col]
