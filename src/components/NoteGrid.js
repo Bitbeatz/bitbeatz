@@ -14,6 +14,7 @@ import Radio from "@material-ui/core/Radio";
 import {connect} from "react-redux";
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
+import InfoIcon from '@material-ui/icons/Info';
 
 const styles = () => ({
     '@global': {
@@ -224,15 +225,9 @@ class NoteGrid extends Component {
                     {/*gross quick fix*/}
                     <Grid container>
                         <Grid item>
-                            {'\u00A0'}
-                        </Grid>
-                        <Grid item spacing={0}>
-                            {'\u00A0'}
-                        </Grid>
-                    </Grid>
-                    <Grid container>
-                        <Grid item>
-                            {'\u00A0'}
+                            <Tooltip title={"Edit this ideal beat and click GENERATE PERCUSSION to create an original sound based on your creation"}>
+                                <InfoIcon />
+                            </Tooltip>
                         </Grid>
                         <Grid item spacing={0}>
                             {'\u00A0'}
