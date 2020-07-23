@@ -142,7 +142,7 @@ def main(request):
         if 'ideal' in data:
             idealData = data['grid']
             for i in idealData:
-                ideal.append(i['0'])
+                ideal.append(idealData[i])
             print(f'ideal: {ideal}')
         if 'controls' in data:
             variate = int(50/int(data['controls']['variation']))
