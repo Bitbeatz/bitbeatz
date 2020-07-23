@@ -8,9 +8,9 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 
-cred=credentials.Certificate('./adminKey.json')
-firebase_admin.initialize_app(cred)
-#firebase_admin.initialize_app()
+# cred=credentials.Certificate('./adminKey.json')
+# firebase_admin.initialize_app(cred)
+firebase_admin.initialize_app()
 
 db = firestore.client()
 
@@ -115,7 +115,7 @@ def create_next_gen(pop, ideal, impurity = 23 ):
        
 
 
-# ideal = [[1,0,0,1,0,1],[1,0,0,1,0,0],[0,0,0,1,0,0],[1,0,0,0,0,0],[1,0,0,0,0,0]]
+ideal = [[1,0,0,1,0,1],[1,0,0,1,0,0],[0,0,0,1,0,0],[1,0,0,0,0,0],[1,0,0,0,0,0]]
 ### testing class capabilities      
 
 def main(request):
@@ -133,7 +133,6 @@ def main(request):
         resp.data = 'Project Id required'
         return resp
 
-    ideal = []
     user_impurity = 5
     doc_ref = db.collection(u'projects').document(projectId)
     project_doc = doc_ref.get()
@@ -142,10 +141,10 @@ def main(request):
         if 'ideal' in data:
             idealData = data['grid']
             for i in idealData:
-                ideal.append(idealData[i])
+                ideal[int(i)] = idealData[i]
             print(f'ideal: {ideal}')
         if 'controls' in data:
-            user_impurity = 25 - int(25/int(data['controls']['variation']))
+            user_impurity = 25 - int(25/(1 + int(data['controls']['variation'])))
     else:
         resp.data = 'Invalid Project Id'
         return resp
