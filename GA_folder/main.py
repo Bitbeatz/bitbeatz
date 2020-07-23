@@ -140,7 +140,7 @@ def main(request):
     if project_doc.exists:
         data = project_doc.to_dict()
         if 'ideal' in data:
-            idealData = data['ideal']
+            idealData = data['grid']
             for i in idealData:
                 ideal.append(i['0'])
             print(f'ideal: {ideal}')
