@@ -92,14 +92,14 @@ def get_scores(pop, goal):
     return scores
 
 
-def create_next_gen(pop, ideal, purity = 23 ):
+def create_next_gen(pop, ideal, impurity = 23 ):
     #add a variation variable 
     #gets the top fit of the population
     scores = get_scores(pop, ideal)
     scores = sorted(scores, key=lambda x: x[1])
     mates = scores[-int(len(scores)/2):]
-    lucky = scores[0:purity]
-    mates = lucky+mates[purity:]
+    lucky = scores[0:impurity]
+    mates = lucky+mates[impurity:]
     next_gen=[]
 
     for i in range(4):
@@ -145,7 +145,7 @@ def main(request):
                 ideal.append(idealData[i])
             print(f'ideal: {ideal}')
         if 'controls' in data:
-            variate = int(50/int(data['controls']['variation']))
+            user_impurity = int(25/int(data['controls']['variation']))
     else:
         resp.data = 'Invalid Project Id'
         return resp
@@ -160,7 +160,7 @@ def main(request):
     print(score)
 
     for i in range(100):
-        generation = create_next_gen(generation, ideal, variate)
+        generation = create_next_gen(generation, ideal, user_impurity)
         print("Generation:", i)
         whole = get_scores(generation,ideal)
         scores = [item[1] for item in whole]
