@@ -145,7 +145,7 @@ def main(request):
                 ideal.append(i['0'])
             print(f'ideal: {ideal}')
         if 'controls' in data:
-            user_impurity = int(25/int(data['controls']['variation']))
+            user_impurity = 25 - int(25/int(data['controls']['variation']))
     else:
         resp.data = 'Invalid Project Id'
         return resp
