@@ -134,7 +134,7 @@ def main(request):
         return resp
 
     ideal = []
-    variate = 5
+    user_impurity = 5
     doc_ref = db.collection(u'projects').document(projectId)
     project_doc = doc_ref.get()
     if project_doc.exists:
