@@ -134,7 +134,7 @@ def main(request):
         return resp
 
     ideal = []
-    variate = 5
+    user_impurity = 5
     doc_ref = db.collection(u'projects').document(projectId)
     project_doc = doc_ref.get()
     if project_doc.exists:
@@ -142,7 +142,7 @@ def main(request):
         if 'ideal' in data:
             idealData = data['grid']
             for i in idealData:
-                ideal.append(i['0'])
+                ideal.append(idealData[i])
             print(f'ideal: {ideal}')
         if 'controls' in data:
             user_impurity = 25 - int(25/int(data['controls']['variation']))
